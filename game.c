@@ -1,5 +1,4 @@
 #include "game.h"
-#include <math.h>
 
 // debugging
 #include <stdio.h>
@@ -21,7 +20,8 @@ void gameInit(Game* game){
 }
 
 void updateArray(Game* game){
-    game->gateSpaces = {0,0,0,0,0 ,0,0,0,0,0 ,0,0,0,0,0 ,0};
+    for(int i = 0; i < 16; i++)
+        game->gateSpaces[i] = 0;
 }
 
 void draw(Game* game){
@@ -42,20 +42,19 @@ void handleInput(Game* game) {
     }
 
     if(inputChar == 'w'){
-        game->sp->engineThrust = (game->sp->engineThrust < 1.0) ? game->sp->engineThrust + THRUST_INCREMENT : 1;
+        game->sp->engineThrust = (game->sp->engineThrust < 1.0) ? game->sp->engineThrust + THRUST_INCREMENT : 1.0;
     }
 
     if(inputChar == 's'){
-        game->sp->engineThrust = (game->sp->engineThrust > 0.0) ? game->sp->engineThrust - THRUST_INCREMENT : 0;
+        game->sp->engineThrust = (game->sp->engineThrust > 0.0) ? game->sp->engineThrust - THRUST_INCREMENT : 0.0;
     }
 }
 
 void update(Game* game) {
-    while(true){
-        handleInput(game);
+    spaceshipUpdate(game->sp);
 
-        drawConsole(game);
-    }
+    game->spaceshipPos[0] += game->sp->movementVec[0];
+    game->spaceshipPos[1] += game->sp->movementVec[1];
 }
 
 void freeGame(Game* game) {
@@ -66,5 +65,5 @@ void freeGame(Game* game) {
 void drawConsole(Game* game) {
     fprintf(stdout, "Spaceship position: %3d %3d\n", game->spaceshipPos[0], game->spaceshipPos[1]);
     fprintf(stdout, "Spaceship is moving in direction %.2f %.2f\n", game->sp->movementVec[0], game->sp->movementVec[1]);
-    fprintf(stdout, "Spaceship is heading in direction %.2f %.2f\n", game->sp->headingVec[0], game->sp->headingVec[1]);
+    fprintf(stdout, "Spaceship is heading in direction %.2f with engines on %.2f\n", game->sp->headingAngle, game->sp->engineThrust);
 }

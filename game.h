@@ -1,5 +1,7 @@
 #include "spaceship.h"
 
+#include <math.h>
+#include <stdlib.h>
 
 typedef struct{
     Spaceship* sp;

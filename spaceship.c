@@ -1,7 +1,8 @@
 #include "spaceship.h"
 
 void spaceshipInit(Spaceship* sp){
-    sp->movementVec = {1.0, 0.0};
+    sp->movementVec[0] = 1.0;
+    sp->movementVec[1] = 0.0;
     sp->headingAngle = 90.0;
     sp->engineThrust = 0.0;
 
