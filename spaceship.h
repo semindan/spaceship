@@ -1,10 +1,11 @@
 #include <stdbool.h>
+#include <math.h>
 
 typedef struct{
     double movementVec[2];
     
     // normalized
-    double headingVec[2];
+    double headingAngle;
     double engineThrust;
 
     int hp;

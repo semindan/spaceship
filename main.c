@@ -1,11 +1,10 @@
-#include "spaceship.h"
-
-void draw(){
-    
-}
+#include "game.h"
 
 int main(int argc, char[][] argv){
-    Spaceship* player = (Spaceship*) malloc(sizeof(Spaceship));
+    Game* game = (Game*) malloc(sizeof(Game));
+    gameInit(game);
 
-    free(player);
+    update(game);
+
+    freeGame(game);
 }
