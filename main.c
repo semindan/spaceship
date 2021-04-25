@@ -13,7 +13,7 @@ void menu(){
  * Update the game (position, vectors etc.)
  * Detect collisions
  * 
- * Draw state on screen and periferies
+ * Draw on screen and periferies
 */
 void gameLoop(Game* game){
 

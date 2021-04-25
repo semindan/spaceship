@@ -12,7 +12,7 @@ double rad2deg(double radians){
 void spaceshipInit(Spaceship* sp){
     sp->movementVec[0] = 1.0;
     sp->movementVec[1] = 0.0;
-    sp->headingAngle = 90.0;
+    sp->headingAngle = 0.0;
     sp->engineThrust = 0.0;
 
     sp->hp = 3;
@@ -20,7 +20,6 @@ void spaceshipInit(Spaceship* sp){
     sp->invincible = false;
 }
 
-// check if calc is correct
 void spaceshipUpdate(Spaceship *sp){
     sp->movementVec[0] += cos(deg2rad(sp->headingAngle)) * sp->engineThrust;
     sp->movementVec[1] += sin(deg2rad(sp->headingAngle)) * sp->engineThrust;
