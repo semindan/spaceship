@@ -1,5 +1,4 @@
 #include "game.h"
-
 // debugging
 #include <stdio.h>
 
@@ -11,18 +10,21 @@
 
 void gameInit(Game* game){
     game->sp = (Spaceship*) malloc(sizeof(Spaceship));
+    game->sp->dimensionsVec[0] = SCREEN_WIDTH / 10; //to be updated
+    game->sp->dimensionsVec[1] = SCREEN_HEIGHT / 10; //to be updated according to the screen size
     spaceshipInit(game->sp);
-
+    
     game->spaceshipPos[0] = SCREEN_WIDTH / 2;
     game->spaceshipPos[1] = SCREEN_HEIGHT / 2;
 
-    updateArray(game);
+
+    game->rootGate = (Gate*) malloc(sizeof(Gate));
+    gateInit(game->rootGate);
+    
+   
 }
 
-void updateArray(Game* game){
-    for(int i = 0; i < 16; i++)
-        game->gateSpaces[i] = 0;
-}
+
 
 void draw(Game* game){
     //address magic
@@ -48,17 +50,29 @@ void handleInput(Game* game) {
     if(inputChar == 's'){
         game->sp->engineThrust = (game->sp->engineThrust > 0.0) ? game->sp->engineThrust - THRUST_INCREMENT : 0.0;
     }
+
 }
 
 void update(Game* game) {
     spaceshipUpdate(game->sp);
+    generateGate(game->rootGate, SCREEN_WIDTH, SCREEN_HEIGHT, game->sp->dimensionsVec);
+    updateGates(game->rootGate, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     game->spaceshipPos[0] += game->sp->movementVec[0];
     game->spaceshipPos[1] += game->sp->movementVec[1];
+
 }
 
 void freeGame(Game* game) {
     free(game->sp);
+    Gate *cur = game->rootGate;
+    while (game->rootGate != NULL)
+    {   
+        cur = game->rootGate->next;
+        free(game->rootGate);
+        game->rootGate = cur;
+    }
+    
     free(game);
 }
 

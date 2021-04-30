@@ -3,6 +3,7 @@
 
 typedef struct{
     double movementVec[2];
+    int dimensionsVec[2];
     
     // normalized
     double headingAngle;

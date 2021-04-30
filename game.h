@@ -1,5 +1,5 @@
 #include "spaceship.h"
-
+#include "gate.h"
 #include <math.h>
 #include <stdlib.h>
 
@@ -7,8 +7,7 @@ typedef struct{
     Spaceship* sp;
     int spaceshipPos[2];
     double spaceshipVelocity;
-
-    int gateSpaces[16];
+    Gate *rootGate;
 } Game;
 
 /**
