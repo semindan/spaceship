@@ -1,8 +1,11 @@
-#include "mzapo_regs.h"
-#include "stdint.h"
+#ifndef __LOWLEVEL_H__
+#define __LOWLEVEL_H__
 
-#define SCREEN_WIDTH 51
-#define SCREEN_HEIGTH 30
+#include <stdint.h>
+
+#include "mzapo_regs.h"
+#include "game.h"
+
 
 /*      SETS COLOR TO FIRST OR SECOND LED       */
 void setLED1Color(char red, char green, char blue);
@@ -17,3 +20,5 @@ char getKnob3Value();
 void draw(char** canvas);
 void draw(char** canvas, int sizeX, int sizeY);
 void draw(char** canvas, int sizeX, int sizeY, int posX, int posY);
+
+#endif /* __LOWLEVEL_H__ */

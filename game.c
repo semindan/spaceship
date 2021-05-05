@@ -1,12 +1,4 @@
 #include "game.h"
-// debugging
-#include <stdio.h>
-
-// defines
-#define THRUST_INCREMENT 0.1
-#define ROTATION_ANGLE 15.0
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 640
 
 void gameInit(Game* game){
     game->sp = (Spaceship*) malloc(sizeof(Spaceship));
@@ -24,7 +16,19 @@ void gameInit(Game* game){
    
 }
 
+_Bool hasCollided(Game* game){
+    Gate* g = getNearestGate(game->rootGate, game->spaceshipPos[0]);
 
+    // AABB collision
+    if(g->gapX < game->spaceshipPos[0] + game->sp->sizeX &&
+    g->gapX + g->gapW > game->spaceshipPos[0] &&
+    g->gapY < game->spaceshipPos[1] + game->sp->sizeY &&
+    g->gapY + g->gapH > game->spaceshipPos[1]){
+        return true;
+    }
+
+    return false;
+}
 
 void draw(Game* game){
     //address magic
@@ -74,10 +78,4 @@ void freeGame(Game* game) {
     }
     
     free(game);
-}
-
-void drawConsole(Game* game) {
-    fprintf(stdout, "Spaceship position: %3d %3d\n", game->spaceshipPos[0], game->spaceshipPos[1]);
-    fprintf(stdout, "Spaceship is moving in direction %.2f %.2f\n", game->sp->movementVec[0], game->sp->movementVec[1]);
-    fprintf(stdout, "Spaceship is heading in direction %.2f with engines on %.2f\n", game->sp->headingAngle, game->sp->engineThrust);
 }

@@ -1,3 +1,6 @@
+#ifndef __SPACESHIP_H__
+#define __SPACESHIP_H__
+
 #include <stdbool.h>
 #include <math.h>
 
@@ -8,6 +11,9 @@ typedef struct{
     // normalized
     double headingAngle;
     double engineThrust;
+
+    double sizeX;
+    double sizeY;
 
     int hp;
     bool speedBoost;
@@ -20,3 +26,5 @@ void spaceshipInit(Spaceship* sp);
 
 /*  Updates spaceship movement  */
 void spaceshipUpdate(Spaceship *sp);
+
+#endif /* __SPACESHIP_H__ */

@@ -1,8 +1,5 @@
 #include "gate.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h> 
-#include <assert.h>
+
 void generateGate(Gate *rootGate, int screenWidth, int screenHeight, int *spDimensions){
     
     srand(time(NULL));
@@ -33,6 +30,7 @@ void generateGate(Gate *rootGate, int screenWidth, int screenHeight, int *spDime
     cur->next = gate;
 
 }
+
 void updateGates(Gate *currentGate, int screenWidth, int screenHeight){
     
     // pseudo pop
@@ -44,6 +42,22 @@ void updateGates(Gate *currentGate, int screenWidth, int screenHeight){
     }
     
 }
+
+Gate* getNearestGate(Gate* gate, int x){
+    if(gate->next == NULL){
+        return gate;
+    }
+
+    double distA = fabs(gate->gapX - x);
+    double distB = fabs(gate->next->gapX - x);
+    
+    if(distA < distB){
+        return gate;
+    } else {
+        return getNearestGate(gate->next, x);
+    }
+}
+
 void gateInit(Gate *gate){
     gate->gapH = gate->gapW = 0;
     gate->gapX = gate->gapY = 0;
