@@ -34,3 +34,13 @@ char getKnob3Value(){
     uint32_t* addr = SPILED_REG_BASE_PHYS + SPILED_REG_KNOBS_8BIT_o;
     return (*addr) & 0xFF;
 }
+
+void draw(char** canvas){
+    uint32_t* addr = PARLCD_REG_BASE_PHYS;
+    for(int x = 0; x < SCREEN_WIDTH; x++){
+        for(int y = 0; y < SCREEN_HEIGTH; y++){
+            // write to address
+        
+        }
+    }
+}
