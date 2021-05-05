@@ -56,7 +56,4 @@ void update(Game* game);
 */
 void freeGame(Game* game);
 
-// debug pro console use
-void drawConsole(Game* game);
-
 #endif  /* __GAME_H_ */

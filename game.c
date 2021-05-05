@@ -58,9 +58,13 @@ void handleInput(Game* game) {
 }
 
 void update(Game* game) {
+    if(hasCollided(game))
+        game->sp->hp--;
+    
     spaceshipUpdate(game->sp);
     generateGate(game->rootGate, SCREEN_WIDTH, SCREEN_HEIGHT, game->sp->dimensionsVec);
     updateGates(game->rootGate, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 
     game->spaceshipPos[0] += game->sp->movementVec[0];
     game->spaceshipPos[1] += game->sp->movementVec[1];
