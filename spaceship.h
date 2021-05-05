@@ -14,6 +14,7 @@ typedef struct{
 
     double sizeX;
     double sizeY;
+    double maxThrust;
 
     int hp;
     bool speedBoost;

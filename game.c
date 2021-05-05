@@ -20,10 +20,11 @@ _Bool hasCollided(Game* game){
     Gate* g = getNearestGate(game->rootGate, game->spaceshipPos[0]);
 
     // AABB collision
-    if(g->gapX < game->spaceshipPos[0] + game->sp->sizeX &&
-    g->gapX + g->gapW > game->spaceshipPos[0] &&
-    g->gapY < game->spaceshipPos[1] + game->sp->sizeY &&
-    g->gapY + g->gapH > game->spaceshipPos[1]){
+    if( g->gapX < game->spaceshipPos[0] + game->sp->sizeX &&
+        g->gapX + g->gapW > game->spaceshipPos[0] &&
+        g->gapY < game->spaceshipPos[1] + game->sp->sizeY &&
+        g->gapY + g->gapH > game->spaceshipPos[1]) {
+
         return true;
     }
 
@@ -36,6 +37,9 @@ void draw(Game* game){
 
 void handleInput(Game* game) {
     char inputChar = fgetc(stdin);
+
+    float heading = (getKnob1Value()/255) * 360.f;
+    float thrust =  (getKnob2Value()/255) * game->sp->maxThrust;
 
     if(inputChar == 'q'){
         game->sp->headingAngle += ROTATION_ANGLE;
