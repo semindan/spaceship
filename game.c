@@ -41,7 +41,7 @@ void handleInput(Game* game) {
     float heading = (getKnob1Value()/255) * 360.f;
     float thrust =  (getKnob2Value()/255) * game->sp->maxThrust;
     
-    setLED2Color(getKnob1Value(), getKnob1Value(), getKnob1Value());
+    setLED2Color(255, 0, 255);
     if(inputChar == 'q'){
         game->sp->headingAngle += ROTATION_ANGLE;
         game->sp->headingAngle += (game->sp->headingAngle > 360.0 - ROTATION_ANGLE) ? -360.0 + ROTATION_ANGLE :   ROTATION_ANGLE;

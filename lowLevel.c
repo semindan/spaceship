@@ -16,8 +16,14 @@ void setLED2Color(char red, char green, char blue){
     x |= (uint32_t)green << 8;
     x |= (uint32_t)blue;
 
-    uint32_t* addr = SPILED_REG_BASE_PHYS + SPILED_REG_LED_RGB2_o;
-    (*addr) = x;
+    unsigned char *mem_base;
+    //uint32_t* addr = SPILED_REG_BASE_PHYS + SPILED_REG_LED_RGB2_o;
+    mem_base = map_phys_address(SPILED_REG_BASE_PHYS, SPILED_REG_SIZE, 0);
+    //uint32_t* addr = map_phys_address(SPILED_REG_BASE_PHYS, SPILED_REG_SIZE, 0);
+
+    //(*addr) = x;
+    *(volatile uint32_t*)(mem_base + SPILED_REG_LED_RGB2_o) = x;
+
 }
 
 char getKnob1Value(){
