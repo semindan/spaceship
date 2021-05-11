@@ -12,8 +12,12 @@ void gameInit(Game* game){
 
     game->rootGate = (Gate*) malloc(sizeof(Gate));
     gateInit(game->rootGate);
-    
-   
+    unsigned char * mem_base = initDisplay();
+    //setLED2Color(255, 0, 0, initLED2());
+    parlcd_hx8357_init(mem_base);
+    for(int i = 0; i < 480*320; i++){
+            parlcd_write_data2x(mem_base+i, 0);
+    }
 }
 
 _Bool hasCollided(Game* game){
@@ -36,12 +40,13 @@ void drawGame(Game* game){
 }
 
 void handleInput(Game* game) {
-    char inputChar = fgetc(stdin);
+    //char inputChar = fgetc(stdin);
+    char inputChar = 's';
+    //float heading = (getKnob1Value()/255) * 360.f;
+    //float thrust =  (getKnob2Value()/255) * game->sp->maxThrust;
 
-    float heading = (getKnob1Value()/255) * 360.f;
-    float thrust =  (getKnob2Value()/255) * game->sp->maxThrust;
     
-    setLED2Color(255, 0, 255);
+    
     if(inputChar == 'q'){
         game->sp->headingAngle += ROTATION_ANGLE;
         game->sp->headingAngle += (game->sp->headingAngle > 360.0 - ROTATION_ANGLE) ? -360.0 + ROTATION_ANGLE :   ROTATION_ANGLE;

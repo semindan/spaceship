@@ -9,7 +9,7 @@
 
 /*      SETS COLOR TO FIRST OR SECOND LED       */
 void setLED1Color(char red, char green, char blue);
-void setLED2Color(char red, char green, char blue);
+void setLED2Color(char red, char green, char blue, unsigned char* mem_base);
 
 /*      RETURNS VALUE FROM SPECIFIED KNOB       */
 char getKnob1Value();
