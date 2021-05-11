@@ -31,7 +31,7 @@ _Bool hasCollided(Game* game){
     return false;
 }
 
-void draw(Game* game){
+void drawGame(Game* game){
     //address magic
 }
 
@@ -40,7 +40,8 @@ void handleInput(Game* game) {
 
     float heading = (getKnob1Value()/255) * 360.f;
     float thrust =  (getKnob2Value()/255) * game->sp->maxThrust;
-
+    
+    setLED2Color(getKnob1Value(), getKnob1Value(), getKnob1Value());
     if(inputChar == 'q'){
         game->sp->headingAngle += ROTATION_ANGLE;
         game->sp->headingAngle += (game->sp->headingAngle > 360.0 - ROTATION_ANGLE) ? -360.0 + ROTATION_ANGLE :   ROTATION_ANGLE;
