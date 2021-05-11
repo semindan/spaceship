@@ -18,7 +18,7 @@ char getKnob3Value();
 
 /*      HANDLE DISPLAY      */
 void draw(char** canvas);
-void draw(char** canvas, int sizeX, int sizeY);
-void draw(char** canvas, int sizeX, int sizeY, int posX, int posY);
+//void draw(char** canvas, int sizeX, int sizeY);
+//void draw(char** canvas, int sizeX, int sizeY, int posX, int posY);
 
 #endif /* __LOWLEVEL_H__ */

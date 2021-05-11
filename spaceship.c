@@ -21,7 +21,7 @@ void spaceshipInit(Spaceship* sp){
 }
 
 void spaceshipUpdate(Spaceship *sp){
-    sp->movementVec[0] += cos(deg2rad(sp->headingAngle)) * sp->engineThrust;
-    sp->movementVec[1] += sin(deg2rad(sp->headingAngle)) * sp->engineThrust;
+    sp->movementVec[0] += 0;//cos(deg2rad(sp->headingAngle)) * sp->engineThrust;
+    sp->movementVec[1] += 0;//sin(deg2rad(sp->headingAngle)) * sp->engineThrust;
 
 }

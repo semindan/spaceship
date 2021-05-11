@@ -39,7 +39,7 @@ _Bool hasCollided(Game* game);
 /**
  * Tady bude core vykreslovani na display a LEDky
 */
-void draw(Game* game);
+void drawGame(Game* game);
 
 /**
  * Sem se potom daji vsechny registry na potenciometry, kteryma se to bude ovladat

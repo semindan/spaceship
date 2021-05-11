@@ -19,10 +19,10 @@ void gameLoop(Game* game){
 
     while(true){
         handleInput(game);
-
+        
         update(game);
 
-        drawConsole(game);
+        //drawConsole(game);
     }
 }
 

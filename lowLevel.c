@@ -38,7 +38,7 @@ char getKnob3Value(){
 void draw(char** canvas){
     uint32_t* addr = PARLCD_REG_BASE_PHYS;
     for(int x = 0; x < SCREEN_WIDTH; x++){
-        for(int y = 0; y < SCREEN_HEIGTH; y++){
+        for(int y = 0; y < SCREEN_HEIGHT; y++){
             // write to address
         
         }
