@@ -1,10 +1,12 @@
 #include "lowLevel.h"
+unsigned char *initDisplay(){
+    return (unsigned char *)map_phys_address(PARLCD_REG_BASE_PHYS, PARLCD_REG_SIZE, 0);
+}
+/*
 unsigned char *initLED2(){
     return map_phys_address(SPILED_REG_BASE_PHYS, SPILED_REG_SIZE, 0);
 }
-unsigned char *initDisplay(){
-    return map_phys_address(PARLCD_REG_BASE_PHYS, PARLCD_REG_SIZE, 0);
-}
+
 void setLED1Color(char red, char green, char blue){
     uint32_t x = 0;
     x |= (uint32_t)red << 16;
@@ -41,10 +43,11 @@ char getKnob3Value(){
 
 void draw(char** canvas){
     uint32_t* addr = PARLCD_REG_BASE_PHYS;
-    for(int x = 0; x < SCREEN_WIDTH; x++){
-        for(int y = 0; y < SCREEN_HEIGHT; y++){
+    for(int x = 0; x < 480; x++){
+        for(int y = 0; y < 320; y++){
             // write to address
         
         }
     }
 }
+*/

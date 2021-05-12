@@ -19,6 +19,7 @@ typedef struct{
     int spaceshipPos[2];
     double spaceshipVelocity;
     Gate *rootGate;
+    unsigned char *mem_base_lcd;
 } Game;
 
 /**

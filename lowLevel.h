@@ -4,7 +4,9 @@
 #include <stdint.h>
 
 #include "mzapo_regs.h"
-#include "game.h"
+#include "mzapo_parlcd.h"
+#include "mzapo_phys.h"
+//#include "game.h"
 
 
 /*      SETS COLOR TO FIRST OR SECOND LED       */
@@ -17,6 +19,7 @@ char getKnob2Value();
 char getKnob3Value();
 
 /*      HANDLE DISPLAY      */
+unsigned char *initDisplay();
 void draw(char** canvas);
 //void draw(char** canvas, int sizeX, int sizeY);
 //void draw(char** canvas, int sizeX, int sizeY, int posX, int posY);

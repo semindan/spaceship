@@ -8,16 +8,35 @@ void gameInit(Game* game){
     
     game->spaceshipPos[0] = SCREEN_WIDTH / 2;
     game->spaceshipPos[1] = SCREEN_HEIGHT / 2;
-
+    
 
     game->rootGate = (Gate*) malloc(sizeof(Gate));
     gateInit(game->rootGate);
-    unsigned char * mem_base = initDisplay();
-    //setLED2Color(255, 0, 0, initLED2());
-    parlcd_hx8357_init(mem_base);
-    for(int i = 0; i < 480*320; i++){
-            parlcd_write_data2x(mem_base+i, 0);
+    
+    
+    game->mem_base_lcd = map_phys_address(PARLCD_REG_BASE_PHYS, PARLCD_REG_SIZE, 0);
+    /*
+    if(game->mem_base_lcd == NULL){
+        printf("error!\n");
+        exit(1);
     }
+    */
+   /*
+    parlcd_hx8357_init(game->mem_base_lcd);
+    parlcd_write_cmd(game->mem_base_lcd, 0x2c);
+    /*
+     unsigned char r = 255;
+     unsigned char g = 255;
+     unsigned char b = 255;
+   uint16_t Rgb565 = (r & 0b11111000) <<8 ;
+    Rgb565 = Rgb565 + ((g & 0b11111100 ) <<3);
+    Rgb565 = Rgb565 + ((b) >> 3);
+    */
+/*
+    parlcd_write_data(game->mem_base_lcd, rand());
+    
+     parlcd_delay(50);
+     */
 }
 
 _Bool hasCollided(Game* game){
@@ -36,12 +55,15 @@ _Bool hasCollided(Game* game){
 }
 
 void drawGame(Game* game){
+   
+    //}
+    
     //address magic
 }
 
 void handleInput(Game* game) {
     //char inputChar = fgetc(stdin);
-    char inputChar = 's';
+    char inputChar = 'f';
     //float heading = (getKnob1Value()/255) * 360.f;
     //float thrust =  (getKnob2Value()/255) * game->sp->maxThrust;
 

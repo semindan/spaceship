@@ -1,7 +1,7 @@
 #include "spaceship.h"
 
 // move someplace else
-#define M_PI   3.14159265358979323846264338327950288
+//#define M_PI   3.14159265358979323846264338327950288
 double deg2rad(double degrees){
     return degrees * M_PI / 180.0;
 }

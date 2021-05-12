@@ -2,14 +2,14 @@ CC = arm-linux-gnueabihf-gcc
 CXX = arm-linux-gnueabihf-g++
 
 CPPFLAGS = -I .
-CFLAGS =-g -std=gnu99 -O1 -Wall
-CXXFLAGS = -g -std=gnu++11 -O1 -Wall
-LDFLAGS = -lrt -lpthread
+CFLAGS =-g -std=gnu99 -O1 -Wall -lm
+CXXFLAGS = -g -std=gnu++11 -O1 -Wall -lm
+LDFLAGS = -lrt -lpthread -lm
 
-SOURCES = gate.c lowLevel.c spaceship.c game.c main.c mzapo_phys.c mzapo_parlcd.c
+SOURCES = mzapo_phys.c mzapo_parlcd.c gate.c lowLevel.c spaceship.c game.c main.c 
 #SOURCES += font_prop14x16.c font_rom8x16.c
 TARGET_EXE = spaceship
-TARGET_IP = 192.168.0.59
+TARGET_IP = 192.168.0.85
 ifeq ($(TARGET_IP),)
 ifneq ($(filter debug run,$(MAKECMDGOALS)),)
 $(warning The target IP address is not set)
