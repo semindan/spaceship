@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "queue.h"
 #include "spaceship.h"
 #include "gate.h"
 #include "lowLevel.h"
@@ -17,7 +18,8 @@ typedef struct{
     Spaceship* sp;
     int spaceshipPos[2];
     double spaceshipVelocity;
-    Gate *rootGate;
+    queue_t *gateQueue;
+    int gateCount;
     void *mem_base_lcd;
     void *mem_base;
     uint16_t *framebuffer;
@@ -60,4 +62,5 @@ void freeGame(Game* game);
 
 void drawSpaceship(Game *game, uint16_t* framebuffer);
 void drawGates(Game *game, uint16_t* framebuffer);
+void drawGate(Gate *gate, uint16_t*framebuffer);
 #endif  /* __GAME_H_ */

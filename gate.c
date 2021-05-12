@@ -1,6 +1,6 @@
 #include "gate.h"
 
-void generateGate(Gate *rootGate, int screenWidth, int screenHeight, int *spDimensions){
+void generateGate(queue_t* gateQueue, int screenWidth, int screenHeight){
     
     srand(time(NULL));
 
@@ -12,34 +12,38 @@ void generateGate(Gate *rootGate, int screenWidth, int screenHeight, int *spDime
     gateInit(gate);
 
     
-    int spWidth = spDimensions[0];
-    int spHeight = spDimensions[1];
+    //int spWidth = spDimensions[0];
+    //int spHeight = spDimensions[1];
     
     // random number in range rand() % (upper - lower + 1) + lower;
-    gate->gapW = rand() % (screenWidth/10 - spWidth + 1) + spWidth;
-    gate->gapH = rand() % (screenHeight - spHeight*2 + 1) + spHeight*2; 
+    gate->gapW = 30;//rand() % (screenWidth/10 - spWidth + 1) + spWidth;
+    gate->gapH = 30;//rand() % (screenHeight - spHeight*2 + 1) + spHeight*2; 
 
-    gate->gapX = screenWidth;
-    gate->gapY = screenHeight;
+    gate->gapX = screenWidth/2;//screenWidth;
+    gate->gapY = screenHeight/3;//screenHeight;
     
-    // pseudo push
-    Gate *cur = rootGate;
-    while(cur->next != NULL){
-        cur =  cur->next;
+    if(!push_to_queue(gateQueue, gate)){
+        printf("FULL\n");
     }
-    cur->next = gate;
-
 }
 
-void updateGates(Gate *currentGate, int screenWidth, int screenHeight){
-    
-    // pseudo pop
-    while (currentGate->gapX + currentGate->gapW < 0 || currentGate->gapX > screenWidth)
-    {   
-        Gate *cur = currentGate->next;
-        free(currentGate);
-        currentGate = cur;
+void updateGates(queue_t *gateQueue, int screenWidth, int screenHeight){
+
+    for(int x = gateQueue->tail - 1; x >= gateQueue->head; x--){
+        Gate * gate = get_from_queue(gateQueue, x);
+        gate->gapX -= 100;
+        printf("%d           size %d\n", x, gateQueue->size);
+        if(gate->gapX + gate->gapW < 0 || gate->gapX > screenWidth){
+            
+            if(pop_from_queue(gateQueue) != NULL){
+                 free(gate);
+            }else{
+                printf("EMPTY\n");
+            }
+           
+        }
     }
+
     
 }
 
@@ -59,7 +63,6 @@ Gate* getNearestGate(Gate* gate, int x){
 }
 
 void gateInit(Gate *gate){
-    gate->gapH = gate->gapW = 0;
-    gate->gapX = gate->gapY = 0;
-    gate->next = NULL;
+    gate->gapH = gate->gapW = 10;
+    gate->gapX = gate->gapY = 10;
 }

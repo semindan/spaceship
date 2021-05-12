@@ -9,9 +9,8 @@ void gameInit(Game* game){
     game->spaceshipPos[0] = SCREEN_WIDTH / 2;
     game->spaceshipPos[1] = SCREEN_HEIGHT / 2;
     
-
-    game->rootGate = (Gate*) malloc(sizeof(Gate));
-    gateInit(game->rootGate);
+    game->gateCount = 0;
+    game->gateQueue = create_queue(50);
     
     game->mem_base = initHardware();
     game->mem_base_lcd = initDisplay();
@@ -21,8 +20,8 @@ void gameInit(Game* game){
 }
 
 _Bool hasCollided(Game* game){
-    Gate* g = getNearestGate(game->rootGate, game->spaceshipPos[0]);
-
+    //Gate* g = getNearestGate(game->rootGate, game->spaceshipPos[0]);
+        /*
     // AABB collision
     if( g->gapX < game->spaceshipPos[0] + game->sp->sizeX &&
         g->gapX + g->gapW > game->spaceshipPos[0] &&
@@ -31,7 +30,7 @@ _Bool hasCollided(Game* game){
 
         return true;
     }
-
+    */
     return false;
 }
 
@@ -43,7 +42,7 @@ void drawGame(Game* game){
 
     // draw stuff to framebuffer
     drawSpaceship(game, game->framebuffer);
-    //drawGates(game, framebuffer);
+    drawGates(game, game->framebuffer);
 
     // render2screen
     draw(game->mem_base_lcd, game->framebuffer);
@@ -80,10 +79,12 @@ void update(Game* game) {
         game->sp->hp--;
     */
     spaceshipUpdate(game->sp);
-    /*
-    generateGate(game->rootGate, SCREEN_WIDTH, SCREEN_HEIGHT, game->sp->dimensionsVec);
-    updateGates(game->rootGate, SCREEN_WIDTH, SCREEN_HEIGHT);
-    */
+    
+    if(game->gateQueue->size < 10){
+            printf("size %d\n", get_queue_size(game->gateQueue));
+           generateGate(game->gateQueue, SCREEN_WIDTH, SCREEN_HEIGHT);     
+    }
+    updateGates(game->gateQueue, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     if(game->spaceshipPos[0] + game->sp->movementVec[0] < SCREEN_WIDTH-game->sp->sizeX 
     && game->spaceshipPos[0] + game->sp->movementVec[0] >= game->sp->sizeX){
@@ -100,14 +101,7 @@ void update(Game* game) {
 
 void freeGame(Game* game) {
     free(game->sp);
-    Gate *cur = game->rootGate;
-    while (game->rootGate != NULL)
-    {   
-        cur = game->rootGate->next;
-        free(game->rootGate);
-        game->rootGate = cur;
-    }
-    
+    delete_queue(game->gateQueue);
     free(game);
 }
 void drawSpaceship(Game *game, uint16_t* framebuffer){
@@ -125,5 +119,25 @@ void drawSpaceship(Game *game, uint16_t* framebuffer){
   
 }
 void drawGates(Game *game, uint16_t* framebuffer){
-    return;
+    
+    for(int x = game->gateQueue->head; x < game->gateQueue->tail; x++){
+        Gate * gate = get_from_queue(game->gateQueue, x);
+      
+        drawGate(gate, framebuffer);
+    }
+        
+      
+    
 }
+void drawGate(Gate *gate, uint16_t*framebuffer){
+    for(int y = 0; y < SCREEN_HEIGHT; y++){
+        for(int x = 0; x < SCREEN_WIDTH; x++){
+            if(x <  gate->gapX + gate->gapW && x >= gate->gapX && (y <= gate->gapY || y >= gate->gapH+gate->gapY)){
+                framebuffer[y*SCREEN_WIDTH+x] = getColor(0,255,0);  
+            }
+
+        }
+    }
+
+}
+
