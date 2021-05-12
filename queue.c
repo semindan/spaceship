@@ -17,13 +17,14 @@ bool push_to_queue(queue_t *queue, void *data)
    if(queue->size >= queue->capacity){
       return false;
    }
+   
    queue->size++;
    queue->array[(queue->tail++)%queue->capacity] = data;
    return true;
 }
 
 void* pop_from_queue(queue_t *queue){
-    if(queue->head == queue->tail || queue->size == 0){
+    if(queue->head == queue->tail && queue->size == 0){
         return NULL;
     }
     queue->size--;
@@ -31,7 +32,8 @@ void* pop_from_queue(queue_t *queue){
 }
 
 void* get_from_queue(queue_t *queue, int idx){
-    return queue->array[((queue->head)+idx)%queue->capacity];
+    
+    return queue->array[(idx)%queue->capacity];
 }
 
 void delete_queue(queue_t *queue){

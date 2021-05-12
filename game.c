@@ -80,8 +80,7 @@ void update(Game* game) {
     */
     spaceshipUpdate(game->sp);
     
-    if(game->gateQueue->size < 10){
-            printf("size %d\n", get_queue_size(game->gateQueue));
+    if(game->gateQueue->size < 10 && ((double)rand()/(double)RAND_MAX) > 0.9){
            generateGate(game->gateQueue, SCREEN_WIDTH, SCREEN_HEIGHT);     
     }
     updateGates(game->gateQueue, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -122,8 +121,10 @@ void drawGates(Game *game, uint16_t* framebuffer){
     
     for(int x = game->gateQueue->head; x < game->gateQueue->tail; x++){
         Gate * gate = get_from_queue(game->gateQueue, x);
-      
-        drawGate(gate, framebuffer);
+        if(gate != NULL){
+            drawGate(gate, framebuffer);
+        }
+        
     }
         
       
