@@ -14,29 +14,8 @@ void gameInit(Game* game){
     gateInit(game->rootGate);
     
     
-    game->mem_base_lcd = map_phys_address(PARLCD_REG_BASE_PHYS, PARLCD_REG_SIZE, 0);
-    /*
-    if(game->mem_base_lcd == NULL){
-        printf("error!\n");
-        exit(1);
-    }
-    */
-   /*
+    game->mem_base_lcd = initDisplay();
     parlcd_hx8357_init(game->mem_base_lcd);
-    parlcd_write_cmd(game->mem_base_lcd, 0x2c);
-    /*
-     unsigned char r = 255;
-     unsigned char g = 255;
-     unsigned char b = 255;
-   uint16_t Rgb565 = (r & 0b11111000) <<8 ;
-    Rgb565 = Rgb565 + ((g & 0b11111100 ) <<3);
-    Rgb565 = Rgb565 + ((b) >> 3);
-    */
-/*
-    parlcd_write_data(game->mem_base_lcd, rand());
-    
-     parlcd_delay(50);
-     */
 }
 
 _Bool hasCollided(Game* game){
@@ -55,10 +34,18 @@ _Bool hasCollided(Game* game){
 }
 
 void drawGame(Game* game){
-   
-    //}
-    
-    //address magic
+
+
+    unsigned char r = 0;
+    unsigned char g = 0;
+    unsigned char b = 255;
+    uint16_t rgb565 = ((((r>>3)&0x1f)<<11) | (((g>>2)&0x3f)<<5) | (((b>>3)&0x1f))); 
+
+
+     parlcd_write_cmd(game->mem_base_lcd, 0x2c);
+    for(int x = 0; x < SCREEN_WIDTH*SCREEN_HEIGHT; x++){
+        parlcd_write_data(game->mem_base_lcd, rgb565);
+    }
 }
 
 void handleInput(Game* game) {
