@@ -1,9 +1,10 @@
 #include "lowLevel.h"
+#include <stdio.h>
 unsigned char *initDisplay(){
     return (unsigned char *)map_phys_address(PARLCD_REG_BASE_PHYS, PARLCD_REG_SIZE, 0);
 }
 
-unsigned char *initLED2(){
+unsigned char *initHardware(){
     return map_phys_address(SPILED_REG_BASE_PHYS, SPILED_REG_SIZE, 0);
 }
 
@@ -24,18 +25,24 @@ void setLED2Color(char red, char green, char blue, unsigned char * mem_base){
     *(volatile uint32_t*)(mem_base + SPILED_REG_LED_RGB2_o) = x;
 }
 
-char getKnob1Value(){
-    return 'a';
+unsigned char getKnobBlueValue(unsigned char * mem_base){
+    uint32_t *addr =  mem_base+SPILED_REG_KNOBS_8BIT_o;
     //return ((*addr) >> 16) & 0xFF;
+    return (*addr) & 0xFF;
+    
 }
 
-char getKnob2Value(){
-    return 'a';
-    //    return ((*addr) >> 8) & 0xFF;
+unsigned char getKnob2Value(unsigned char * mem_base){
+     uint32_t *addr =  mem_base+SPILED_REG_KNOBS_8BIT_o;
+    //return ((*addr) >> 16) & 0xFF;
+    //return *addr;
+        return ((*addr) >> 8) & 0xFF;
 }
 
-char getKnob3Value(){
-    return 'a';
+unsigned char getKnob3Value(unsigned char * mem_base){
+      uint32_t *addr =  mem_base+SPILED_REG_KNOBS_8BIT_o;
+    return ((*addr) >> 16) & 0xFF;
+    //return *addr;
     //return (*addr) & 0xFF;
 }
 

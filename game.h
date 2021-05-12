@@ -20,6 +20,7 @@ typedef struct{
     double spaceshipVelocity;
     Gate *rootGate;
     unsigned char *mem_base_lcd;
+    unsigned char *mem_base;
 } Game;
 
 /**

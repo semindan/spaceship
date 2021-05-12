@@ -13,7 +13,7 @@ void gameInit(Game* game){
     game->rootGate = (Gate*) malloc(sizeof(Gate));
     gateInit(game->rootGate);
     
-    
+    game->mem_base = initHardware();
     game->mem_base_lcd = initDisplay();
     parlcd_hx8357_init(game->mem_base_lcd);
 }
@@ -36,9 +36,11 @@ _Bool hasCollided(Game* game){
 void drawGame(Game* game){
 
 
-    unsigned char r = 0;
-    unsigned char g = 0;
-    unsigned char b = 255;
+
+    unsigned char r = getKnob3Value(game->mem_base);
+    printf("knob val %d\n", getKnobBlueValue(game->mem_base));
+    unsigned char g = getKnob2Value(game->mem_base);
+    unsigned char b = getKnobBlueValue(game->mem_base);
     uint16_t rgb565 = ((((r>>3)&0x1f)<<11) | (((g>>2)&0x3f)<<5) | (((b>>3)&0x1f))); 
 
 
