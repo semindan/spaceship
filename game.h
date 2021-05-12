@@ -20,6 +20,7 @@ typedef struct{
     Gate *rootGate;
     void *mem_base_lcd;
     void *mem_base;
+    uint16_t *framebuffer;
 } Game;
 
 /**

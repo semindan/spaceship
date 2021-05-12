@@ -16,6 +16,8 @@ void gameInit(Game* game){
     game->mem_base = initHardware();
     game->mem_base_lcd = initDisplay();
     parlcd_hx8357_init(game->mem_base_lcd);
+
+    game->framebuffer = (uint16_t*) malloc(sizeof(uint16_t) * SCREEN_HEIGHT * SCREEN_WIDTH);
 }
 
 _Bool hasCollided(Game* game){
@@ -37,34 +39,39 @@ void drawGame(Game* game){
 
 
     // make new framebuffer
-    uint16_t* framebuffer = (uint16_t*) malloc(sizeof(uint16_t) * SCREEN_HEIGHT * SCREEN_WIDTH);
+    
 
     // draw stuff to framebuffer
-    drawSpaceship(game, framebuffer);
+    drawSpaceship(game, game->framebuffer);
     //drawGates(game, framebuffer);
 
     // render2screen
-    draw(game->mem_base_lcd, framebuffer);
+    draw(game->mem_base_lcd, game->framebuffer);
     //reset screen
-    uint16_t* black = (uint16_t*) calloc(sizeof(uint16_t),SCREEN_HEIGHT * SCREEN_WIDTH);
-    draw(game->mem_base_lcd, black);
+
+    for(int i = 0; i < SCREEN_HEIGHT*SCREEN_WIDTH; i++){
+        game->framebuffer[i] = getColor(0,0,0);
+    }
+
     // cleanup
-    free(framebuffer);
-    free(black);
+    //free(framebuffer);
+    //free(black);
 
 }
 
 void handleInput(Game* game) {
     //char inputChar = fgetc(stdin);
-    char inputChar = 'f';
+    
+/*
     float heading = (((float)getKnobBlueValue(game->mem_base))/255) * 360.f;
     float thrust =  (((float)getKnobGreenValue(game->mem_base))/255) * game->sp->maxThrust;
-    printf("heading %f  thrust %f\n", heading, thrust);
+    //printf("heading %f  thrust %f\n", heading, thrust);
     
     
     game->sp->headingAngle += heading;
-    game->sp->engineThrust += thrust;
-
+    game->sp->engineThrust = 1;
+    */
+   game->sp->headingAngle = getKnobBlueValue(game->mem_base);
 }
 
 void update(Game* game) {
@@ -105,12 +112,11 @@ void freeGame(Game* game) {
 }
 void drawSpaceship(Game *game, uint16_t* framebuffer){
     
-    int imgStartX = SCREEN_WIDTH - game->sp->sizeX;
+    int imgStartX = SCREEN_WIDTH/2 - game->sp->sizeX;
     int imgStartY = game->spaceshipPos[1] - game->sp->sizeY;
     
     for(int y = 0; y < game->sp->sizeY; y++){
         for(int x = 0; x < game->sp->sizeX; x++){
-        
             framebuffer[(imgStartY + y) * SCREEN_WIDTH + imgStartX + x] = getColor(255,0,0);
         }
     }
