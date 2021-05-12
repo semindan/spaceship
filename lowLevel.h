@@ -14,15 +14,17 @@ void setLED1Color(char red, char green, char blue);
 void setLED2Color(char red, char green, char blue, unsigned char* mem_base);
 
 /*      RETURNS VALUE FROM SPECIFIED KNOB       */
-unsigned char getKnobBlueValue();
-unsigned char getKnob2Value();
-unsigned char getKnob3Value();
+unsigned char getKnobBlueValue(void *mem_base);
+unsigned char getKnobGreenValue(void *mem_base);
+unsigned char getKnobRedValue(void *mem_base);
 
 /*      HANDLE DISPLAY      */
-unsigned char *initDisplay();
-unsigned char *initHardware();
-void draw(char** canvas);
+void *initDisplay();
+void *initHardware();
+void draw(void* lcd_addr, uint16_t* framebuffer);
 //void draw(char** canvas, int sizeX, int sizeY);
 //void draw(char** canvas, int sizeX, int sizeY, int posX, int posY);
 
+/* COLOR */
+uint16_t getColor(unsigned char red, unsigned char green, unsigned char blue);
 #endif /* __LOWLEVEL_H__ */

@@ -29,6 +29,9 @@
 
 /* SPI connected knobs and LEDs registers and keyboard */
 
+#define SCREEN_WIDTH 480
+#define SCREEN_HEIGHT 320
+
 #define SPILED_REG_BASE_PHYS  0x43c40000
 #define SPILED_REG_SIZE       0x00004000
 

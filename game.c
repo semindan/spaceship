@@ -36,59 +36,58 @@ _Bool hasCollided(Game* game){
 void drawGame(Game* game){
 
 
+    // make new framebuffer
+    uint16_t* framebuffer = (uint16_t*) malloc(sizeof(uint16_t) * SCREEN_HEIGHT * SCREEN_WIDTH);
 
-    unsigned char r = getKnob3Value(game->mem_base);
-    printf("knob val %d\n", getKnobBlueValue(game->mem_base));
-    unsigned char g = getKnob2Value(game->mem_base);
-    unsigned char b = getKnobBlueValue(game->mem_base);
-    uint16_t rgb565 = ((((r>>3)&0x1f)<<11) | (((g>>2)&0x3f)<<5) | (((b>>3)&0x1f))); 
+    // draw stuff to framebuffer
+    drawSpaceship(game, framebuffer);
+    //drawGates(game, framebuffer);
 
+    // render2screen
+    draw(game->mem_base_lcd, framebuffer);
+    //reset screen
+    uint16_t* black = (uint16_t*) calloc(sizeof(uint16_t),SCREEN_HEIGHT * SCREEN_WIDTH);
+    draw(game->mem_base_lcd, black);
+    // cleanup
+    free(framebuffer);
+    free(black);
 
-     parlcd_write_cmd(game->mem_base_lcd, 0x2c);
-    for(int x = 0; x < SCREEN_WIDTH*SCREEN_HEIGHT; x++){
-        parlcd_write_data(game->mem_base_lcd, rgb565);
-    }
 }
 
 void handleInput(Game* game) {
     //char inputChar = fgetc(stdin);
     char inputChar = 'f';
-    //float heading = (getKnob1Value()/255) * 360.f;
-    //float thrust =  (getKnob2Value()/255) * game->sp->maxThrust;
-
+    float heading = (((float)getKnobBlueValue(game->mem_base))/255) * 360.f;
+    float thrust =  (((float)getKnobGreenValue(game->mem_base))/255) * game->sp->maxThrust;
+    printf("heading %f  thrust %f\n", heading, thrust);
     
     
-    if(inputChar == 'q'){
-        game->sp->headingAngle += ROTATION_ANGLE;
-        game->sp->headingAngle += (game->sp->headingAngle > 360.0 - ROTATION_ANGLE) ? -360.0 + ROTATION_ANGLE :   ROTATION_ANGLE;
-    }
-
-    if(inputChar == 'e'){
-        game->sp->headingAngle -= ROTATION_ANGLE;
-        game->sp->headingAngle += (game->sp->headingAngle < ROTATION_ANGLE) ? 360.0 - ROTATION_ANGLE :   (-1) * ROTATION_ANGLE;
-    }
-
-    if(inputChar == 'w'){
-        game->sp->engineThrust = (game->sp->engineThrust < 1.0) ? game->sp->engineThrust + THRUST_INCREMENT : 1.0;
-    }
-
-    if(inputChar == 's'){
-        game->sp->engineThrust = (game->sp->engineThrust > 0.0) ? game->sp->engineThrust - THRUST_INCREMENT : 0.0;
-    }
+    game->sp->headingAngle += heading;
+    game->sp->engineThrust += thrust;
 
 }
 
 void update(Game* game) {
+    /*
     if(hasCollided(game))
         game->sp->hp--;
-    
+    */
     spaceshipUpdate(game->sp);
+    /*
     generateGate(game->rootGate, SCREEN_WIDTH, SCREEN_HEIGHT, game->sp->dimensionsVec);
     updateGates(game->rootGate, SCREEN_WIDTH, SCREEN_HEIGHT);
+    */
 
+    if(game->spaceshipPos[0] + game->sp->movementVec[0] < SCREEN_WIDTH-game->sp->sizeX 
+    && game->spaceshipPos[0] + game->sp->movementVec[0] >= game->sp->sizeX){
+            game->spaceshipPos[0] += game->sp->movementVec[0];
 
-    game->spaceshipPos[0] += game->sp->movementVec[0];
+    }
+       if(game->spaceshipPos[1] + game->sp->movementVec[1] < SCREEN_HEIGHT-game->sp->sizeY
+    && game->spaceshipPos[1] + game->sp->movementVec[1] >= game->sp->sizeY){
     game->spaceshipPos[1] += game->sp->movementVec[1];
+
+    }
 
 }
 
@@ -103,4 +102,22 @@ void freeGame(Game* game) {
     }
     
     free(game);
+}
+void drawSpaceship(Game *game, uint16_t* framebuffer){
+    
+    int imgStartX = SCREEN_WIDTH - game->sp->sizeX;
+    int imgStartY = game->spaceshipPos[1] - game->sp->sizeY;
+    
+    for(int y = 0; y < game->sp->sizeY; y++){
+        for(int x = 0; x < game->sp->sizeX; x++){
+        
+            framebuffer[(imgStartY + y) * SCREEN_WIDTH + imgStartX + x] = getColor(255,0,0);
+        }
+    }
+    
+  
+  
+}
+void drawGates(Game *game, uint16_t* framebuffer){
+    return;
 }

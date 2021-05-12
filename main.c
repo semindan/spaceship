@@ -18,6 +18,7 @@ void menu(){
 void gameLoop(Game* game){
     
     while(true){
+        handleInput(game);
         update(game);
         drawGame(game);
     }

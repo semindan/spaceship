@@ -11,16 +11,15 @@
 // defines
 #define THRUST_INCREMENT 0.1
 #define ROTATION_ANGLE 15.0
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 640
+
 
 typedef struct{
     Spaceship* sp;
     int spaceshipPos[2];
     double spaceshipVelocity;
     Gate *rootGate;
-    unsigned char *mem_base_lcd;
-    unsigned char *mem_base;
+    void *mem_base_lcd;
+    void *mem_base;
 } Game;
 
 /**
@@ -58,4 +57,6 @@ void update(Game* game);
 */
 void freeGame(Game* game);
 
+void drawSpaceship(Game *game, uint16_t* framebuffer);
+void drawGates(Game *game, uint16_t* framebuffer);
 #endif  /* __GAME_H_ */

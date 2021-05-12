@@ -14,14 +14,16 @@ void spaceshipInit(Spaceship* sp){
     sp->movementVec[1] = 0.0;
     sp->headingAngle = 0.0;
     sp->engineThrust = 0.0;
-
+    sp->sizeX = 10;
+    sp->sizeY = 15;
     sp->hp = 3;
     sp->speedBoost = false;
     sp->invincible = false;
+    sp->maxThrust = 20;
 }
 
 void spaceshipUpdate(Spaceship *sp){
-    sp->movementVec[0] += 0;//cos(deg2rad(sp->headingAngle)) * sp->engineThrust;
-    sp->movementVec[1] += 0;//sin(deg2rad(sp->headingAngle)) * sp->engineThrust;
+    sp->movementVec[0] += cos(deg2rad(sp->headingAngle)) * sp->engineThrust;
+    sp->movementVec[1] += sin(deg2rad(sp->headingAngle)) * sp->engineThrust;
 
 }
