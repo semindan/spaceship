@@ -1,3 +1,4 @@
+
 #include "game.h"
 
 void gameInit(Game* game){
@@ -43,23 +44,6 @@ _Bool hasCollided(Game* game){
         else{
             g->color = getColor(0,255,0);
         }
-
-
-        /*
-                  |_|
-                +
-                   _
-                  | |
-        */
-        /*
-        if( g->gapX < game->spaceshipPos[0] + game->sp->sizeX &&
-            g->gapX + g->gapW > game->spaceshipPos[0] &&
-            g->gapY < game->spaceshipPos[1] + game->sp->sizeY &&
-            g->gapY + g->gapH > game->spaceshipPos[1]) {
-
-            return true;
-        }
-        */
     }
     
     return false;
