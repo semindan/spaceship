@@ -32,7 +32,9 @@ void gameLoop(Game* game){
         */
         //printf("start %d\n", start.tv_nsec);
             handleInput(game);
-            update(game);
+            if(!update(game)){
+                printf("GAMEOVER\n");
+            }
             drawGame(game);
         /*
         clock_gettime(CLOCK_MONOTONIC_RAW, &end);

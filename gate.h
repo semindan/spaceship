@@ -6,6 +6,7 @@
 #include <time.h> 
 #include <assert.h>
 #include "queue.h"
+#include "lowLevel.h"
 
 typedef struct GateTag{
     double gapX;
@@ -13,6 +14,7 @@ typedef struct GateTag{
     double gapW;
     double gapH;
     struct GateTag *next;
+    uint16_t color;
 } Gate;
 
 

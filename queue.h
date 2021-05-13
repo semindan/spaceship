@@ -10,12 +10,8 @@ typedef struct {
    int size;
    int head;
    int tail;
-   /*
+   int capacity;
    void **array;
-   */
-  int capacity;
-   void **array;
-   // TODO - Include your data structure here
 } queue_t;
 
 /* creates a new queue with a given size */
@@ -45,6 +41,10 @@ void* get_from_queue(queue_t *queue, int idx);
 
 /* gets number of stored elements */
 int get_queue_size(queue_t *queue);
+
+
+void clean_queue(queue_t *queue);
+
 
 #endif /* __QUEUE_H__ */
 

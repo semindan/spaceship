@@ -30,9 +30,12 @@ void* pop_from_queue(queue_t *queue){
     queue->size--;
     return queue->array[(queue->head++)%queue->capacity]; 
 }
-
+void clean_queue(queue_t *queue){
+    for(int i = queue->head; i < queue->tail; i++){
+        pop_from_queue(queue);
+    }
+}
 void* get_from_queue(queue_t *queue, int idx){
-    
     return queue->array[(idx)%queue->capacity];
 }
 

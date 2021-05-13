@@ -61,4 +61,5 @@ Gate* getNearestGate(Gate* gate, int x){
 void gateInit(Gate *gate){
     gate->gapH = gate->gapW = 10;
     gate->gapX = gate->gapY = 10;
+    gate->color = getColor(0,255,0);
 }

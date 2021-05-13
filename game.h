@@ -18,11 +18,14 @@ typedef struct{
     Spaceship* sp;
     int spaceshipPos[2];
     double spaceshipVelocity;
+    unsigned char previousHeadingAngle;
+    unsigned char startingThrust;
     queue_t *gateQueue;
     int gateCount;
     void *mem_base_lcd;
     void *mem_base;
     uint16_t *framebuffer;
+
 } Game;
 
 /**
@@ -53,7 +56,7 @@ void handleInput(Game* game);
 /**
  * Hlavni gameloop
 */
-void update(Game* game);
+bool update(Game* game);
 
 /**
  * Uvolneni veskere pameti
@@ -63,4 +66,6 @@ void freeGame(Game* game);
 void drawSpaceship(Game *game, uint16_t* framebuffer);
 void drawGates(Game *game, uint16_t* framebuffer);
 void drawGate(Gate *gate, uint16_t*framebuffer);
+void resetScreen(uint16_t*framebuffer);
+
 #endif  /* __GAME_H_ */
