@@ -11,29 +11,30 @@ void generateGate(queue_t* gateQueue, int screenWidth, int screenHeight){
     }
     gateInit(gate);
 
-    
+    //TODO: randomize gates
+
     //int spWidth = spDimensions[0];
     //int spHeight = spDimensions[1];
     
     // random number in range rand() % (upper - lower + 1) + lower;
     gate->gapW = 30;//rand() % (screenWidth/10 - spWidth + 1) + spWidth;
-    gate->gapH = 30;//rand() % (screenHeight - spHeight*2 + 1) + spHeight*2; 
+    gate->gapH = 90;//rand() % (screenHeight - spHeight*2 + 1) + spHeight*2; 
 
     gate->gapX = screenWidth;//screenWidth;
-    gate->gapY = screenHeight/3;//screenHeight;
+    gate->gapY = screenHeight/5;//screenHeight;
     
     if(!push_to_queue(gateQueue, gate)){
         printf("FULL\n");
     }
 }
 
-void updateGates(queue_t *gateQueue, int screenWidth, int screenHeight){
+void updateGates(queue_t *gateQueue,double engineThrust, int screenWidth, int screenHeight){
 
     int x = gateQueue->head;
     int i = gateQueue->tail;
     for(; x < i; x++){
         Gate * gate = get_from_queue(gateQueue, x);
-        gate->gapX -= 10;
+        gate->gapX -= abs(engineThrust);
         if(gate->gapX + gate->gapW < 0 || gate->gapX > screenWidth){
             Gate *gatePopped = pop_from_queue(gateQueue);
         }

@@ -26,6 +26,7 @@ typedef struct{
     void *mem_base_lcd;
     void *mem_base;
     uint16_t *framebuffer;
+    int score;
 
 } Game;
 
@@ -68,5 +69,7 @@ void drawSpaceship(Game *game, uint16_t* framebuffer);
 void drawGates(Game *game, uint16_t* framebuffer);
 void drawGate(Gate *gate, uint16_t*framebuffer);
 void resetScreen(uint16_t*framebuffer);
+void addScore(Game *game);
+void drawScore(Game* game);
 
 #endif  /* __GAME_H_ */
