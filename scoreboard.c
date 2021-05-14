@@ -4,6 +4,7 @@ ScoreArray* loadScoreBoard(){
   FILE *f = fopen("scores.txt", "r");
   if(f == NULL){
       fprintf(stderr, "Error while opening\n");
+      return NULL;
   }
   ScoreArray* sa = (ScoreArray*) malloc(sizeof(ScoreArray));
   sa->capacity = 5;
@@ -12,15 +13,16 @@ ScoreArray* loadScoreBoard(){
   char str[16];
   int integer;
   while(fscanf(f,"%s %d\n", str, &integer) != EOF){
-      printf("LINE\n");
+      printf("%s  %d   %d\n", str, integer, sa->count);
       if(sa->count >= sa->capacity){
+          printf("realloc\n");
           sa->capacity *= 2;
-          sa = realloc(sa, sizeof(Score)*sa->capacity);
+          sa->scores = realloc(sa->scores, sizeof(Score*)*sa->capacity);
       }
       
       Score *score = (Score*) malloc(sizeof(Score));
       score->name = malloc(17);
-      memcpy(score->name, str, 16);
+      strcpy(score->name, str);
       score->value = integer;
       sa->scores[sa->count] = score;
       sa->count++;
@@ -51,7 +53,7 @@ void drawScoreBoard(ScoreArray* scores){
     unsigned char prevKnobVal = getKnobBlueValue(mem_base);
     
     
-    int len = 5;
+    int len = scores->count > 5 ? 5 : scores->count;
     int ind = 0;
     
     
@@ -73,7 +75,7 @@ void drawScoreBoard(ScoreArray* scores){
             unsigned char previousVal = prevKnobVal;
             if (currentVal - previousVal > 5)
             {
-                ind += (ind == scores->count) ? 0 : 1;
+                ind += (ind == scores->count-len) ? 0 : 1;
                 prevKnobVal = currentVal;
             }
             else if (currentVal - previousVal < -5)

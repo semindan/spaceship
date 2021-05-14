@@ -102,18 +102,12 @@ void handleInput(Game *game)
     double heading = (((double)curHeadingAngle - (double)game->previousHeadingAngle) / 255) * 360.f;
     game->previousHeadingAngle = curHeadingAngle;
 
-    //unsigned char curThrust = getKnobGreenValue(game->mem_base);
-    //double thrust =  (((double)curThrust - (double)game->startingThrust)/255) * game->sp->maxThrust;
-    //
-    //double thrust = (double)curThrust - (double)game->startingThrust;
-    //game->startingThrust = curThrust;
-    //printf("heading %f  thrust %f\n", heading, thrust);
+   
     unsigned char curThrust = getKnobGreenValue(game->mem_base);
     double deltaThrust = (double)(curThrust - game->startingThrust)*0.1;
     game->sp->headingAngle = heading;
-    //game->sp->engineThrust += (thrust / 255) * game->sp->maxThrust;
-    // normalize (0-maxThrust);
-// add delta to thrust
+   
+    // add delta to thrust
     game->sp->engineThrust += (2*deltaThrust / 255) * game->sp->maxThrust;
       if(game->sp->engineThrust > game->sp->maxThrust){
         game->sp->engineThrust = game->sp->maxThrust;
@@ -137,6 +131,7 @@ bool update(Game *game)
             //clean game
             resetFrameBuffer(game->framebuffer);
             draw(game->mem_base_lcd, game->framebuffer);
+            resetLedLine(game->mem_base);
             gameOverScreen(game);
             //save score
             return false;
@@ -318,12 +313,12 @@ char *getName(Game *game)
         if (getKnobBlueButton(game->mem_base))
         {
             name[nameIdx++] = alphabet[idx];
-            usleep(100 * 1000);
+            usleep(200 * 1000);
             //draw(game->mem_base_lcd, game->framebuffer);
         }
         if (getKnobRedButton(game->mem_base))
         {
-            usleep(100 * 1000);
+            usleep(200 * 1000);
             break;
         }
         draw(game->mem_base_lcd, game->framebuffer);

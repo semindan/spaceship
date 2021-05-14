@@ -70,6 +70,10 @@ void setLedLine(void *mem_base, int activeLed){
     }
     *addr = result;
 }
+void resetLedLine(void *mem_base){
+    uint32_t *addr =  mem_base+SPILED_REG_LED_LINE_o;
+    *addr = 0;
+}
 void draw(void* lcd_addr, uint16_t* framebuffer){
     parlcd_write_cmd(lcd_addr, 0x2c);
     for(int x = 0; x < SCREEN_WIDTH * SCREEN_HEIGHT; x++){

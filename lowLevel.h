@@ -44,4 +44,5 @@ void drawRectangle(int x, int y,int len, uint16_t color,unsigned char *mem_base_
 int strWidth(char* c);
 void resetFrameBuffer(uint16_t*framebuffer);
 void setLedLine(void *mem_base, int activeLed);
+void resetLedLine(void *mem_base);
 #endif /* __LOWLEVEL_H__ */
