@@ -254,6 +254,7 @@ void gameOverScreen(Game *game)
     while(!getKnobBlueButton(game->mem_base)){
 
     }
+    usleep(100*1000);
     //user writes name
     char *name = getName(game);
     saveScore(game->score, name);

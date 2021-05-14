@@ -73,12 +73,12 @@ void drawScoreBoard(ScoreArray* scores){
             unsigned char previousVal = prevKnobVal;
             if (currentVal - previousVal > 5)
             {
-                ind++;
+                ind += (ind == scores->count) ? 0 : 1;
                 prevKnobVal = currentVal;
             }
             else if (currentVal - previousVal < -5)
             {
-                ind--;
+                ind -= (ind == 0) ? 0 : 1;
                 prevKnobVal = currentVal;
             }
         }
