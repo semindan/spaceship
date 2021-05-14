@@ -1,4 +1,5 @@
 #include "game.h"
+#include "scoreboard.h"
 #include <unistd.h>
 
 #define START_GAME 1
@@ -82,16 +83,19 @@ void gameLoop(Game* game){
    
 }
 void scoreboard(){
-    // open txt 
-      // NAME SCORE DATE     TIME
-      // dan 1100 14/05/2021
-    // a b c d ...
-    // 
+
+    ScoreArray *scoreArr = loadScoreBoard();
+    //sortScoreBoard(scoreArr);
+    saveScoreBoard(scoreArr);
+    drawScoreBoard(scoreArr);
+    freeScoreArray(scoreArr);
+
 }
 
 int main(int argc, char** argv){
 
     Game* game;
+    
     while(true){
 
                 

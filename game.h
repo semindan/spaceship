@@ -4,7 +4,8 @@
 
 #include <math.h>
 #include <stdlib.h>
- #include <unistd.h>
+#include <unistd.h>
+#include <string.h>
 
 #include "queue.h"
 #include "spaceship.h"
@@ -28,7 +29,7 @@ typedef struct{
     void *mem_base;
     uint16_t *framebuffer;
     int score;
-
+    char playerName[16];
 } Game;
 
 /**

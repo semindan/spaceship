@@ -6,7 +6,7 @@ CFLAGS =-g -std=gnu99 -O1 -Wall
 CXXFLAGS = -g -std=gnu++11 -O1 -Wall 
 LDFLAGS = -lrt -lpthread 
 
-SOURCES = font_prop14x16.c font_rom8x16.c queue.c mzapo_phys.c mzapo_parlcd.c gate.c lowLevel.c spaceship.c game.c main.c 
+SOURCES = font_prop14x16.c font_rom8x16.c queue.c mzapo_phys.c mzapo_parlcd.c scoreboard.c gate.c lowLevel.c spaceship.c game.c main.c 
 #SOURCES += font_prop14x16.c font_rom8x16.c
 TARGET_EXE = spaceship
 TARGET_IP = 192.168.0.85

@@ -1,0 +1,5 @@
+dan 100
+vaclav 100
+jiri 1000
+jan 9999
+sdfre 129

@@ -68,9 +68,15 @@ void addScore(Game *game)
     {
 
         Gate *g = get_from_queue(game->gateQueue, i);
+        
+        //printf("%f    %d\n", SCREEN_WIDTH/2 - g->gapX, g->passed);
+        
+     
+        
         if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW && !g->passed)
         {
             game->score++;
+            //g->passed = true;
         }
     }
 }
@@ -109,14 +115,19 @@ void handleInput(Game *game)
     // normalize (0-maxThrust);
 // add delta to thrust
     game->sp->engineThrust += (2*deltaThrust / 255) * game->sp->maxThrust;
-    game->sp->engineThrust = game->sp->engineThrust > game->sp->maxThrust ? game->sp->maxThrust : game->sp->engineThrust;
-    game->sp->engineThrust = game->sp->engineThrust < 0 ? 0 : game->sp->engineThrust;
+      if(game->sp->engineThrust > game->sp->maxThrust){
+        game->sp->engineThrust = game->sp->maxThrust;
+        game->startingThrust = curThrust;
+    } else if(game->sp->engineThrust < 0){
+        game->sp->engineThrust = 0;
+        game->startingThrust = curThrust;
+    }
 
 }
 
 bool update(Game *game)
 {
-
+    addScore(game);
     if (hasCollided(game))
     {
         game->sp->hp--;
@@ -139,7 +150,7 @@ bool update(Game *game)
         }
     }
 
-    addScore(game);
+    
     spaceshipUpdate(game->sp);
 
     if (game->gateQueue->size < 10 && ((double)rand() / (double)RAND_MAX) > 0.9)
@@ -208,7 +219,6 @@ void drawGate(Gate *gate, uint16_t *framebuffer)
 }
 void showThrust(Game *game)
 {
-    printf("%f\n",  round(game->sp->engineThrust/game->sp->maxThrust * 32));
     setLedLine(game->mem_base, round(game->sp->engineThrust/game->sp->maxThrust * 32));
 }
 void drawScore(Game *game)
@@ -220,6 +230,9 @@ void drawScore(Game *game)
 
 void saveScore(int score, char *name)
 {
+    FILE *scores = fopen("scores.txt", "a");
+    fprintf(scores, "%s %d\n", name, score);
+    fclose(scores);
     // open txt
     // write name and score
 }
@@ -227,7 +240,20 @@ void gameOverScreen(Game *game)
 {
 
     //show gameoverscreen
+    
+    char scoreStr[100];
+    sprintf(scoreStr, "%d" ,game->score);
 
+    drawString(SCREEN_WIDTH/2, SCREEN_HEIGHT/4, "GAME OVER!", game->mem_base_lcd, game->framebuffer);
+    drawString(SCREEN_WIDTH/4, SCREEN_HEIGHT/2, "score: ", game->mem_base_lcd, game->framebuffer );
+    drawString(SCREEN_WIDTH*3/4, SCREEN_HEIGHT/2, scoreStr, game->mem_base_lcd, game->framebuffer);
+
+
+
+    draw(game->mem_base_lcd, game->framebuffer);
+    while(!getKnobBlueButton(game->mem_base)){
+
+    }
     //user writes name
     char *name = getName(game);
     saveScore(game->score, name);
