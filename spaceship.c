@@ -19,7 +19,7 @@ void spaceshipInit(Spaceship* sp){
     sp->hp = 3;
     sp->speedBoost = false;
     sp->invincible = false;
-    sp->maxThrust = 25;
+    sp->maxThrust = 10;
 }
 
 void spaceshipUpdate(Spaceship *sp){

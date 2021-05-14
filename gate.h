@@ -15,6 +15,7 @@ typedef struct GateTag{
     double gapH;
     struct GateTag *next;
     uint16_t color;
+    bool passed;
 } Gate;
 
 

@@ -38,7 +38,7 @@ _Bool hasCollided(Game *game)
         // AABB collision
         if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW)
         {
-
+            g->passed = true;
             if (game->spaceshipPos[1] <= g->gapY)
             {
                 g->color = getColor(0, 0, 255);
@@ -68,7 +68,7 @@ void addScore(Game *game)
     {
 
         Gate *g = get_from_queue(game->gateQueue, i);
-        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW)
+        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW && !g->passed)
         {
             game->score++;
         }
@@ -96,15 +96,22 @@ void handleInput(Game *game)
     double heading = (((double)curHeadingAngle - (double)game->previousHeadingAngle) / 255) * 360.f;
     game->previousHeadingAngle = curHeadingAngle;
 
-    unsigned char curThrust = getKnobGreenValue(game->mem_base);
+    //unsigned char curThrust = getKnobGreenValue(game->mem_base);
     //double thrust =  (((double)curThrust - (double)game->startingThrust)/255) * game->sp->maxThrust;
     //
-    double thrust = (double)curThrust - (double)game->startingThrust;
-
-    printf("heading %f  thrust %f\n", heading, (thrust / 255) * game->sp->maxThrust);
-
+    //double thrust = (double)curThrust - (double)game->startingThrust;
+    //game->startingThrust = curThrust;
+    //printf("heading %f  thrust %f\n", heading, thrust);
+    unsigned char curThrust = getKnobGreenValue(game->mem_base);
+    double deltaThrust = (double)(curThrust - game->startingThrust)*0.1;
     game->sp->headingAngle = heading;
-    game->sp->engineThrust = (thrust / 255) * game->sp->maxThrust;
+    //game->sp->engineThrust += (thrust / 255) * game->sp->maxThrust;
+    // normalize (0-maxThrust);
+// add delta to thrust
+    game->sp->engineThrust += (2*deltaThrust / 255) * game->sp->maxThrust;
+    game->sp->engineThrust = game->sp->engineThrust > game->sp->maxThrust ? game->sp->maxThrust : game->sp->engineThrust;
+    game->sp->engineThrust = game->sp->engineThrust < 0 ? 0 : game->sp->engineThrust;
+
 }
 
 bool update(Game *game)
@@ -201,9 +208,8 @@ void drawGate(Gate *gate, uint16_t *framebuffer)
 }
 void showThrust(Game *game)
 {
-   
-    printf("%f\n",  game->sp->engineThrust/game->sp->maxThrust * 32);
-    setLedLine(game->mem_base, (int)(game->sp->engineThrust/game->sp->maxThrust * 32 + 0.5));
+    printf("%f\n",  round(game->sp->engineThrust/game->sp->maxThrust * 32));
+    setLedLine(game->mem_base, round(game->sp->engineThrust/game->sp->maxThrust * 32));
 }
 void drawScore(Game *game)
 {
