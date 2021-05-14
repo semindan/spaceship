@@ -62,7 +62,14 @@ unsigned char getKnobRedValue(void *mem_base){
     return ((*addr) >> 16) & 0xFF;
   
 }
-
+void setLedLine(void *mem_base, int activeLed){
+    uint32_t *addr =  mem_base+SPILED_REG_LED_LINE_o;
+    int result = 0;
+    for(int i = 0; i < activeLed; i++){
+     result = result | (1 << (32-i));
+    }
+    *addr = result;
+}
 void draw(void* lcd_addr, uint16_t* framebuffer){
     parlcd_write_cmd(lcd_addr, 0x2c);
     for(int x = 0; x < SCREEN_WIDTH * SCREEN_HEIGHT; x++){

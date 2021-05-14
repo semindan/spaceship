@@ -4,6 +4,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+ #include <unistd.h>
 
 #include "queue.h"
 #include "spaceship.h"
@@ -68,8 +69,11 @@ void freeGame(Game* game);
 void drawSpaceship(Game *game, uint16_t* framebuffer);
 void drawGates(Game *game, uint16_t* framebuffer);
 void drawGate(Gate *gate, uint16_t*framebuffer);
-void resetScreen(uint16_t*framebuffer);
+void resetFrameBuffer(uint16_t*framebuffer);
 void addScore(Game *game);
 void drawScore(Game* game);
-
+void saveScore(int score, char *name);
+void gameOverScreen(Game *game);
+char *getName(Game *game);
+void showThrust(Game *game);
 #endif  /* __GAME_H_ */

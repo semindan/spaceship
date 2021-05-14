@@ -81,6 +81,13 @@ void gameLoop(Game* game){
     }
    
 }
+void scoreboard(){
+    // open txt 
+      // NAME SCORE DATE     TIME
+      // dan 1100 14/05/2021
+    // a b c d ...
+    // 
+}
 
 int main(int argc, char** argv){
 
@@ -99,7 +106,7 @@ int main(int argc, char** argv){
             break;
             
             case SCOREBOARD:
-            //scoreboard();
+            scoreboard();
             break;
             
             case EXIT:
