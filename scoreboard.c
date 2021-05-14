@@ -33,7 +33,29 @@ ScoreArray* loadScoreBoard(){
   return sa;
 }
 
-ScoreArray* sortScoreBoard(ScoreArray* scores);
+ScoreArray* sortScoreBoard(ScoreArray* scores, int low, int high){
+    if(low < high){
+        int p = makePartitionArray(scores, low, high);
+        sortScoreBoard(scores, low, p-1);
+        sortScoreBoard(scores, p+1, high);
+    }
+}
+int makePartitionArray(ScoreArray*scores, int low, int high){
+    int pivot = scores->scores[high]->value;
+    int i = low;
+    for(int j = low; j < high; j++){
+        if(scores->scores[j]->value < pivot){
+            Score *temp = scores->scores[i];
+            scores->scores[i] = scores->scores[j];
+            scores->scores[j] = temp;
+            i++;
+        }
+    }
+    Score *temp = scores->scores[i];
+    scores->scores[i] = scores->scores[high];
+    scores->scores[high] = temp;
+    return i;
+}
 
 void saveScoreBoard(ScoreArray* sa){
   FILE *f = fopen("scores.txt", "w");
@@ -86,7 +108,7 @@ void drawScoreBoard(ScoreArray* scores){
         }
         if (getKnobRedButton(mem_base))
         {
-            usleep(100 * 1000);
+            usleep(200 * 1000);
             break;
         }
         draw(mem_base_lcd, framebuffer);
@@ -97,6 +119,10 @@ void drawScoreBoard(ScoreArray* scores){
 
 
 void freeScoreArray(ScoreArray* sa){
-  free(sa->scores);
-  free(sa);
+    for(int i = 0; i < sa->count; i++){
+        free(sa->scores[i]->name);
+        free(sa->scores[i]);
+    }
+    free(sa->scores);
+    free(sa);
 }

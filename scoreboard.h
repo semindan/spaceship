@@ -17,7 +17,8 @@ typedef struct{
 } ScoreArray;
 
 ScoreArray* loadScoreBoard();
-ScoreArray* sortScoreBoard(ScoreArray* scores);
+ScoreArray* sortScoreBoard(ScoreArray* scores, int low, int high);
+int makePartitionArray(ScoreArray*scores, int low, int high);
 void drawScoreBoard(ScoreArray* scores);
 void saveScoreBoard(ScoreArray* sa);
 void freeScoreArray(ScoreArray* sa);

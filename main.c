@@ -93,7 +93,7 @@ void scoreboard(){
     if(scoreArr == NULL){
         return;
     }
-    //sortScoreBoard(scoreArr);
+    sortScoreBoard(scoreArr, 0, scoreArr->scores[scoreArr->count-1]->value);
     saveScoreBoard(scoreArr);
     drawScoreBoard(scoreArr);
     freeScoreArray(scoreArr);
@@ -103,6 +103,11 @@ void scoreboard(){
 int main(int argc, char** argv){
 
     Game* game;
+    // checks if file exists
+    if(access("scores.txt", F_OK) != 0) {
+    FILE *f = fopen("scores.txt", "w");
+    fclose(f);
+    }
     
     while(true){
 

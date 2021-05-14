@@ -246,10 +246,10 @@ void gameOverScreen(Game *game)
 
 
     draw(game->mem_base_lcd, game->framebuffer);
-    while(!getKnobBlueButton(game->mem_base)){
+    while(!getKnobRedButton(game->mem_base)){
 
     }
-    usleep(100*1000);
+    usleep(200*1000);
     //user writes name
     char *name = getName(game);
     saveScore(game->score, name);
@@ -323,6 +323,8 @@ char *getName(Game *game)
         }
         draw(game->mem_base_lcd, game->framebuffer);
     }
-
+    if(name[0] == ' '){
+        strcpy(name, "unknown");
+    }
     return name;
 }

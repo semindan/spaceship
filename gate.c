@@ -17,8 +17,8 @@ void generateGate(queue_t* gateQueue, int screenWidth, int screenHeight){
     //int spHeight = spDimensions[1];
     
     // random number in range rand() % (upper - lower + 1) + lower;
-    gate->gapW = 30;//rand() % (screenWidth/10 - spWidth + 1) + spWidth;
-    gate->gapH = 90;//rand() % (screenHeight - spHeight*2 + 1) + spHeight*2; 
+    gate->gapW = rand() % (screenWidth/20 - screenWidth/30 + 1) + screenWidth/30;
+    gate->gapH = rand() % (screenHeight - screenHeight/30 + 1) + screenHeight/30; 
 
     gate->gapX = screenWidth;//screenWidth;
     gate->gapY = screenHeight/5;//screenHeight;
