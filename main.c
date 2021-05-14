@@ -1,9 +1,13 @@
 #include "game.h"
 #include <unistd.h>
+
+#define START_GAME 1
+#define SCOREBOARD 2
+#define EXIT 3
 /**
  * Handle basic menu
 */
-void menu(Game* game){
+int menu(){
 
 
 
@@ -35,23 +39,26 @@ void menu(Game* game){
     //TODO
     while(true){
         if(getKnobBlueButton(mem_base_buttons)){
-           return;
+           resetFrameBuffer(framebuffer);
+           draw(mem_base_lcd, framebuffer);
+           return START_GAME;
         }
         if(getKnobGreenButton(mem_base_buttons)){
+            resetFrameBuffer(framebuffer);
+            draw(mem_base_lcd, framebuffer);
            //scoreboard
-           return;
+           return SCOREBOARD;
         }
         if(getKnobRedButton(mem_base_buttons)){
-            return;
+            resetFrameBuffer(framebuffer);
+            draw(mem_base_lcd, framebuffer);
+            return EXIT;
         }
     }
     
 
 }
-  double clockToMilliseconds(clock_t ticks){
-    // units/(units/time) => time (seconds) * 1000 = milliseconds
-    return (ticks/(double)CLOCKS_PER_SEC)*1000.0;
-}
+
 
 
 /**
@@ -63,50 +70,47 @@ void menu(Game* game){
  * Draw on screen and periferies
 */
 void gameLoop(Game* game){
-    
-    float FPS = 20;
-    float frameMS = 1000/FPS;
-    float delayMS = 0;
+  
     while(true){
-        /*
-        struct timespec start, end;
-        clock_gettime(CLOCK_MONOTONIC_RAW, &start);
-        */
-        //printf("start %d\n", start.tv_nsec);
             handleInput(game);
-            // save score
             if(!update(game)){
                 printf("GAMEOVER\n");
+                return; 
             }
             drawGame(game);
-        /*
-        clock_gettime(CLOCK_MONOTONIC_RAW, &end);
-        //printf("end %d\n", end.tv_nsec);
-        delayMS = frameMS - ((float)(end.tv_nsec - start.tv_nsec)/1000000);
-        if(delayMS > 0){
-               // usleep(delayMS*1000);
-                parlcd_delay(delayMS);
-        }
-        */
-        //parlcd_delay(delayMS);
-       // printf("%f\n", delayMS);
     }
-      
-        //drawConsole(game);
-    
-
-    
-     
- 
    
 }
 
 int main(int argc, char** argv){
-    Game* game = (Game*) malloc(sizeof(Game));
-    gameInit(game);
 
-    menu(game);
-    gameLoop(game);
+    Game* game;
+    while(true){
 
-    freeGame(game);
+                
+        switch (menu()){
+            
+
+            case START_GAME:
+            game = (Game*) malloc(sizeof(Game));
+            gameInit(game);
+            gameLoop(game);
+            freeGame(game);
+            break;
+            
+            case SCOREBOARD:
+            //scoreboard();
+            break;
+            
+            case EXIT:
+            return 0;
+
+            default:
+            break;
+
+        }
+    }
+   
+
+ 
 }

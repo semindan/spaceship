@@ -22,6 +22,8 @@ void gameInit(Game* game){
     game->previousHeadingAngle = getKnobBlueValue(game->mem_base);
     game->startingThrust = getKnobGreenValue(game->mem_base);
     
+    game->score = 0;
+
 
     game->framebuffer = (uint16_t*) malloc(sizeof(uint16_t) * SCREEN_HEIGHT * SCREEN_WIDTH);
 }
@@ -36,21 +38,16 @@ _Bool hasCollided(Game* game){
         if(SCREEN_WIDTH/2 + game->sp->sizeX >= g->gapX
         && SCREEN_WIDTH/2 <= g->gapX + g->gapW)
         {
-            
-
-
+        
             if(game->spaceshipPos[1] <= g->gapY){
-                printf("game->spaceshipPos[1] <= g->gapY     sp %d   gate %f\n", game->spaceshipPos[1], g->gapY);
                 g->color = getColor(0,0,255);
                 return true;
             }
             else if(game->spaceshipPos[1] + game->sp->sizeY >= g->gapY + g->gapH){
-                printf("game->spaceshipPos[1] + game->sp->sizeY >= g->gapY + g->gapH      sp %f   gate %f\n", game->spaceshipPos[1] + game->sp->sizeY, g->gapY + g->gapH);
                 g->color = getColor(0,0,255);
                 return true;
             }
             else{
-                 printf("MISS                    sp %d   gate %f\n", game->spaceshipPos[1], g->gapY);
                  return false;
             }
         
@@ -77,10 +74,6 @@ void addScore(Game *game){
 
 void drawGame(Game* game){
 
- 
-    // make new framebuffer
-    
-
     // draw stuff to framebuffer
     drawSpaceship(game, game->framebuffer);
     drawGates(game, game->framebuffer);
@@ -89,11 +82,6 @@ void drawGame(Game* game){
     draw(game->mem_base_lcd, game->framebuffer);
     //reset screen
     resetScreen(game->framebuffer);
-    
-
-    // cleanup
-    //free(framebuffer);
-    //free(black);
 
 }
 
@@ -154,7 +142,6 @@ bool update(Game* game) {
        if(game->spaceshipPos[1] + game->sp->movementVec[1] < SCREEN_HEIGHT-game->sp->sizeY
     && game->spaceshipPos[1] + game->sp->movementVec[1] >= 0){
     game->spaceshipPos[1] += game->sp->movementVec[1];
-    printf("%d\n", game->spaceshipPos[1]);
     }
    
     return true;
@@ -167,22 +154,7 @@ void freeGame(Game* game) {
 }
 void drawSpaceship(Game *game, uint16_t* framebuffer){
     
-    int imgStartX = SCREEN_WIDTH/2 - game->sp->sizeX;
-    int imgStartY = game->spaceshipPos[1] - game->sp->sizeY;
-    /*
-         game->spaceshipPos[1] - game->sp->sizeY
-
-            
-
-
-    */
-    /*
-    for(int y = 0; y < game->sp->sizeY; y++){
-        for(int x = 0; x < game->sp->sizeX; x++){
-            framebuffer[(imgStartY + y) * SCREEN_WIDTH + imgStartX + x] = getColor(255,0,0);
-        }
-    }
-    */
+    
     for(int y = game->spaceshipPos[1]; y < game->spaceshipPos[1]+game->sp->sizeY; y++){
         for(int x = SCREEN_WIDTH/2; x < SCREEN_WIDTH/2+game->sp->sizeX; x++){
             framebuffer[y*SCREEN_WIDTH+x] = getColor(255,0,0);
@@ -215,13 +187,7 @@ void drawGate(Gate *gate, uint16_t*framebuffer){
     }
 
 }
-void resetScreen(uint16_t*framebuffer){
-    
-    for(int i = 0; i < SCREEN_HEIGHT*SCREEN_WIDTH; i++){
-        framebuffer[i] = getColor(0,0,0);
-    }
 
-}
 void drawScore(Game* game){
     char scoreStr[100];
     sprintf(scoreStr, "%d", game->score);

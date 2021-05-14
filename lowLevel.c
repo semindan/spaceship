@@ -158,3 +158,10 @@ int strWidth(char* c){
   while(c[length++] != '\0');
   return length*16;
 }
+void resetFrameBuffer(uint16_t*framebuffer){
+    
+    for(int i = 0; i < SCREEN_HEIGHT*SCREEN_WIDTH; i++){
+        framebuffer[i] = getColor(0,0,0);
+    }
+
+}
