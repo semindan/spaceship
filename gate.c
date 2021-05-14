@@ -64,4 +64,5 @@ void gateInit(Gate *gate){
     gate->gapX = gate->gapY = 10;
     gate->color = getColor(0,255,0);
     gate->passed = false;
+    gate->isBonus = false;
 }

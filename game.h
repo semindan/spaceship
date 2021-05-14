@@ -77,4 +77,6 @@ void saveScore(int score, char *name);
 void gameOverScreen(Game *game);
 char *getName(Game *game);
 void showThrust(Game *game);
+void createBonus(Game *game);
+void drawBonus(Game *game, uint16_t *framebuffer);
 #endif  /* __GAME_H_ */

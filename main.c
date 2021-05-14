@@ -93,7 +93,7 @@ void scoreboard(){
     if(scoreArr == NULL){
         return;
     }
-    sortScoreBoard(scoreArr, 0, scoreArr->scores[scoreArr->count-1]->value);
+    sortScoreBoard(scoreArr, 0, scoreArr->count-1);
     saveScoreBoard(scoreArr);
     drawScoreBoard(scoreArr);
     freeScoreArray(scoreArr);

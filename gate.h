@@ -16,6 +16,7 @@ typedef struct GateTag{
     struct GateTag *next;
     uint16_t color;
     bool passed;
+    bool isBonus;
 } Gate;
 
 

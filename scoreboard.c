@@ -33,7 +33,7 @@ ScoreArray* loadScoreBoard(){
   return sa;
 }
 
-ScoreArray* sortScoreBoard(ScoreArray* scores, int low, int high){
+void sortScoreBoard(ScoreArray* scores, int low, int high){
     if(low < high){
         int p = makePartitionArray(scores, low, high);
         sortScoreBoard(scores, low, p-1);
@@ -44,7 +44,7 @@ int makePartitionArray(ScoreArray*scores, int low, int high){
     int pivot = scores->scores[high]->value;
     int i = low;
     for(int j = low; j < high; j++){
-        if(scores->scores[j]->value < pivot){
+        if(scores->scores[j]->value > pivot){
             Score *temp = scores->scores[i];
             scores->scores[i] = scores->scores[j];
             scores->scores[j] = temp;

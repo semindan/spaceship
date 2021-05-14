@@ -36,7 +36,7 @@ _Bool hasCollided(Game *game)
         Gate *g = get_from_queue(game->gateQueue, i);
 
         // AABB collision
-        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW)
+        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW && !g->isBonus)
         {
             g->passed = true;
             if (game->spaceshipPos[1] <= g->gapY)
@@ -87,8 +87,10 @@ void drawGame(Game *game)
     // draw stuff to framebuffer
     drawSpaceship(game, game->framebuffer);
     showThrust(game);
+    drawBonus(game, game->framebuffer);
     drawGates(game, game->framebuffer);
     drawScore(game);
+    
     // render2screen
     draw(game->mem_base_lcd, game->framebuffer);
     //reset screen
@@ -147,12 +149,18 @@ bool update(Game *game)
 
     
     spaceshipUpdate(game->sp);
-
+    
     if (game->gateQueue->size < 10 && ((double)rand() / (double)RAND_MAX) > 0.9)
     {
         generateGate(game->gateQueue, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
+    createBonus(game);
     updateGates(game->gateQueue, game->sp->engineThrust, SCREEN_WIDTH, SCREEN_HEIGHT);
+    
+    
+    
+    
+
 
     if (game->spaceshipPos[0] + game->sp->movementVec[0] < SCREEN_WIDTH - game->sp->sizeX && game->spaceshipPos[0] + game->sp->movementVec[0] >= game->sp->sizeX)
     {
@@ -193,7 +201,7 @@ void drawGates(Game *game, uint16_t *framebuffer)
     for (int x = game->gateQueue->head; x < game->gateQueue->tail; x++)
     {
         Gate *gate = get_from_queue(game->gateQueue, x);
-        if (gate != NULL)
+        if (gate != NULL && !gate->isBonus)
         {
             drawGate(gate, framebuffer);
         }
@@ -327,4 +335,44 @@ char *getName(Game *game)
         strcpy(name, "unknown");
     }
     return name;
+}
+void createBonus(Game *game){
+
+    if(((double)rand() / (double)RAND_MAX) > 0.99){
+        Gate *gate = get_from_queue(game->gateQueue,game->gateQueue->tail-1);
+        gate->isBonus = true;
+        gate->gapW = 15;
+        gate->gapH = 15;
+        // random number in range rand() % (upper - lower + 1) + lower;
+        gate->gapY = rand() % (int )(game->spaceshipPos[1] + game->sp->sizeY - game->spaceshipPos[1] + 1) + game->spaceshipPos[1];
+        gate->gapX = SCREEN_WIDTH;
+    }
+}
+void drawBonus(Game *game, uint16_t *framebuffer)
+{
+    
+    for(int i = game->gateQueue->head; i < game->gateQueue->tail; i++){
+        Gate * gate = get_from_queue(game->gateQueue, i);
+        if(gate->isBonus){
+                const char heart[] = 
+                                     " $$$$$   $$$$$ "  
+                                     "$$$$$$$ $$$$$$$"
+                                     "$$$$$$$$$$$$$$$"
+                                     " $$$$$$$$$$$$$ "
+                                     "  $$$$$$$$$$$  "
+                                     "    $$$$$$$    "
+                                     "      $$$      ";
+                for (int y = gate->gapY; y < gate->gapY+gate->gapH; y++)
+                {
+                    for (int x = gate->gapX; x < gate->gapX+gate->gapW; x++)
+                    {
+                        if(heart[(int)((y-gate->gapY)*gate->gapW) + (int)x- (int)gate->gapX] == '$'){
+                                game->framebuffer[y * SCREEN_WIDTH + x] = gate->color;
+                        }
+                        
+                    }
+                }
+        }
+    }
+    
 }
