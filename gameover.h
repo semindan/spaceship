@@ -16,4 +16,10 @@ void gameOverScreen(void *gameStruct);
  */
 char *getName(void *gameStruct);
 
-#endif
+/**
+ * renders previous and following letters of the alphabet to framebuffer 
+ * returns: void
+ */
+void renderAlphabet(void* gameStruct, int idx);
+
+#endif /* __GAMEOVER_H__ */

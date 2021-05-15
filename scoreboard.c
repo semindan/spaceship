@@ -1,9 +1,6 @@
 #include "scoreboard.h"
 
-/** 
- * loads scoreboard from "scores.txt"
- * returns: ScoreArray, null on missing file 
- */
+/* loads scoreboard from "scores.txt" to ScoreArray */
 ScoreArray* loadScoreboard(){
     FILE *f = fopen("scores.txt", "r");
     if(f == NULL){
@@ -36,10 +33,7 @@ ScoreArray* loadScoreboard(){
     return sa;
 }
 
-/** 
- * sorts Scoreboard by highest score
- * returns: void, changes the passed ScoreArray
- */
+/* sorts Scoreboard by highest score */
 void sortScoreboard(ScoreArray* scores, int low, int high){
     if(low < high) {
         int p = makePartitionArray(scores, low, high);
@@ -48,10 +42,7 @@ void sortScoreboard(ScoreArray* scores, int low, int high){
     }
 }
 
-/** 
- * support function for quicksort in sortScoreboard();
- * returns: int pivot
- */
+/* support function for quicksort in sortScoreboard() */
 int makePartitionArray(ScoreArray*scores, int low, int high){
     int pivot = scores->scores[high]->value;
     int i = low;
@@ -71,11 +62,8 @@ int makePartitionArray(ScoreArray*scores, int low, int high){
     return i;
 }
 
-/** 
- * handles drawing of Scoreboard on the screen
- * draws 5 or less names and scores and handles user controls
- * returns: void 
- */
+/* handles drawing of Scoreboard on the screen
+ * draws 5 or less names and scores and handles user controls */
 void drawScoreboard(ScoreArray* scores){
     
     unsigned char *mem_base_lcd = map_phys_address(PARLCD_REG_BASE_PHYS, PARLCD_REG_SIZE, 0);
@@ -115,15 +103,13 @@ void drawScoreboard(ScoreArray* scores){
         if (getKnobRedButton(mem_base)) {
             break;
         }
+        
         draw(mem_base_lcd, framebuffer);
     }
     
 }
 
-/** 
- * saves scoreboard to "scores.txt" using "w"
- * returns: void 
- */
+/* saves scoreboard to "scores.txt" */
 void saveScoreboard(ScoreArray* sa){
     FILE *f = fopen("scores.txt", "w");
 
@@ -135,10 +121,7 @@ void saveScoreboard(ScoreArray* sa){
     fclose(f);
 }
 
-/** 
- * free allocated memory for ScoreArray
- * returns: void 
- */
+/* free allocated memory for ScoreArray */
 void freeScoreArray(ScoreArray* sa){
     for(int i = 0; i < sa->count; i++){
         free(sa->scores[i]->name);

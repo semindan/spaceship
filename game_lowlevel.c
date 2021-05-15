@@ -7,25 +7,25 @@ void drawBonus(void *gameStruct, uint16_t *framebuffer) {
         return;
     }
 
-            const char heart[] = 
-                                 " $$$$$   $$$$$ "  
-                                 "$$$$$$$ $$$$$$$"
-                                 "$$$$$$$$$$$$$$$"
-                                 " $$$$$$$$$$$$$ "
-                                 "  $$$$$$$$$$$  "
-                                 "    $$$$$$$    "
-                                 "      $$$      ";
-            for (int y = game->bonus->posY; y < game->bonus->posY+game->bonus->height; y++) {
-                for (int x = game->bonus->posX; x < game->bonus->posX+game->bonus->width; x++) {
-                   
-                    if(heart[(int)((y-game->bonus->posY)*game->bonus->width) + (int)x-(int)game->bonus->posX] == '$'){
-                        
-                        game->framebuffer[y * SCREEN_WIDTH + x] = game->bonus->color;
-                    }
-                }
+    const char heart[] = " $$$$$   $$$$$ "  
+                         "$$$$$$$ $$$$$$$"
+                         "$$$$$$$$$$$$$$$"
+                         " $$$$$$$$$$$$$ "
+                         "  $$$$$$$$$$$  "
+                         "    $$$$$$$    "
+                         "      $$$      ";
+    
+    for (int y = game->bonus->posY; y < game->bonus->posY+game->bonus->height; y++) {
+        for (int x = game->bonus->posX; x < game->bonus->posX+game->bonus->width; x++) {
+           
+            if(heart[(int)((y-game->bonus->posY)*game->bonus->width) + (int)x-(int)game->bonus->posX] == '$'){
+                
+                game->framebuffer[y * SCREEN_WIDTH + x] = game->bonus->color;
             }
-        
+        }
     }
+        
+}
 
 
 /*  draws gate to framebuffer  */
@@ -35,6 +35,7 @@ void drawGate(void *gateStruct, uint16_t *framebuffer) {
         for (int x = 0; x < SCREEN_WIDTH; x++) {
             if (x < gate->gapX + gate->gapW && x >= gate->gapX && (
                 y <= gate->gapY || y >= gate->gapH + gate->gapY)){
+
                     framebuffer[y * SCREEN_WIDTH + x] = gate->color;
             }
         }
@@ -71,17 +72,19 @@ void drawSpaceship(void *gameStruct, uint16_t *framebuffer) {
     }
 }
 
+/*  lights LED based on current hp  */
+void showHP(void *gameStruct){
+    Game *game = (Game *) gameStruct;
+    switch(game->sp->hp){
+        case 0: setLED1Color(0,0,0, game->mem_base);    break;
+        case 1: setLED1Color(255,0,0, game->mem_base);  break;
+        case 2: setLED1Color(255,165,0, game->mem_base);break;
+        default:setLED1Color(0,255,0, game->mem_base);  break;
+    }
+}
+
 /*  lights LEDs based on current thrust */
 void showThrust(void *gameStruct) {
     Game *game = (Game *) gameStruct;
     setLedLine(game->mem_base, round(game->sp->engineThrust/game->sp->maxThrust * 32));
-}
-void showHP(void *gameStruct){
-     Game *game = (Game *) gameStruct;
-     switch(game->sp->hp){
-         case 0: setLED1Color(0,0,0, game->mem_base); break;
-         case 1: setLED1Color(255,0,0, game->mem_base); break;
-         case 2: setLED1Color(255,165,0, game->mem_base); break;
-         default:setLED1Color(0,255,0, game->mem_base); break;
-     }
 }

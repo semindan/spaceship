@@ -33,41 +33,35 @@ char *getName(void *gameStruct) {
     int idx = 0;
     int nameIdx = 0;
     int baseChar = 'a';
-    //char alphabet[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
     unsigned char prevButton = getKnobBlueValue(game->mem_base);
 
     while (nameIdx < 16) {
         resetFrameBuffer(game->framebuffer);
-        drawString(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, name,  game->framebuffer);
-        drawChar(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 8, baseChar + idx, getColor(0, 0, 255),  game->framebuffer);
 
-        // handle characters before letter
-        for (int i = idx - 1; i >= 0; i--) {
-            if (SCREEN_WIDTH / 2 - (idx - i) * 16 >= 8 && i >= 0) {
-                drawChar(SCREEN_WIDTH / 2 - (idx - i) * 16, SCREEN_HEIGHT / 8, baseChar + i, getColor(255, 255, 255),  game->framebuffer);
-            }
-        }
-        // draw chars after letter
-        for (int i = idx + 1; i < 26; i++) {
-            if (SCREEN_WIDTH / 2 + (idx - i) * 16 < SCREEN_WIDTH - 8) {
-                drawChar(SCREEN_WIDTH / 2 + (i - idx) * 16, SCREEN_HEIGHT / 8, baseChar + i, getColor(255, 255, 255),  game->framebuffer);
-            }
-        }
+        // render UI
+        drawRectangle(SCREEN_WIDTH/4,SCREEN_HEIGHT*7/8, strWidth("Select"),getColor(0,0,255), game->framebuffer);
+        drawString(SCREEN_WIDTH/4, SCREEN_HEIGHT*7/8, "Select",  game->framebuffer);
+        drawRectangle(SCREEN_WIDTH*3/4,SCREEN_HEIGHT*7/8, strWidth("Save"),getColor(255,0,0), game->framebuffer);
+        drawString(SCREEN_WIDTH*3/4, SCREEN_HEIGHT*7/8, "Save",  game->framebuffer);
+
+        drawString(SCREEN_WIDTH/2, SCREEN_HEIGHT/4, "Enter name:", game->framebuffer);
+        drawString(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, name, game->framebuffer);
+        
+        // render alphabet
+        drawChar(SCREEN_WIDTH/2, SCREEN_HEIGHT * 3/4, baseChar + idx, getColor(0, 0, 255), game->framebuffer);
+        renderAlphabet(gameStruct, idx);
 
         // handle user input
         if (getKnobBlueValue(game->mem_base) != prevButton){
             unsigned char currentVal = getKnobBlueValue(game->mem_base);
             unsigned char previousVal = prevButton;
+
             if (currentVal - previousVal > 5) {
-                idx++;
-                idx %= 26;
+                idx = (idx == 25) ? 0 : idx+1;
                 prevButton = currentVal;
             }
             else if (currentVal - previousVal < -5) {
-                idx--;
-                if(idx == -1){
-                    idx = 25;
-                }
+                idx = (idx == 0) ? 25 : idx-1;
                 prevButton = currentVal;
             }
         }
@@ -86,4 +80,23 @@ char *getName(void *gameStruct) {
         strcpy(name, "unknown");
     }
     return name;
+}
+
+/*  renders previous and following letters of the alphabet  */
+void renderAlphabet(void* gameStruct, int idx){
+    Game *game = (Game *) gameStruct;
+    int baseChar = 'a';
+
+    // handle characters before letter
+    for (int i = idx - 1; i >= 0; i--) {
+        if (SCREEN_WIDTH / 2 - (idx - i) * 16 >= 8 && i >= 0) {
+            drawChar(SCREEN_WIDTH / 2 - (idx - i) * 16, SCREEN_HEIGHT * 3/4, baseChar + i, getColor(255, 255, 255), game->framebuffer);
+        }
+    }
+    // draw chars after letter
+    for (int i = idx + 1; i < 26; i++) {
+        if (SCREEN_WIDTH / 2 + (idx - i) * 16 < SCREEN_WIDTH - 8) {
+            drawChar(SCREEN_WIDTH / 2 + (i - idx) * 16, SCREEN_HEIGHT * 3/4, baseChar + i, getColor(255, 255, 255), game->framebuffer);
+        }
+    }
 }

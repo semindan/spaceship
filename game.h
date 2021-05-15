@@ -6,19 +6,20 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "bonus.h"
 #include "game_lowlevel.h"
 #include "gameover.h"
 #include "gate.h"
 #include "queue.h"
 #include "spaceship.h"
-#include "bonus.h"
 
-#define THRUST_INCREMENT 0.1
 #define ROTATION_ANGLE 15.0
+#define THRUST_INCREMENT 0.1
 
 typedef struct{
-    Spaceship* sp;
+    Bonus *bonus;
     queue_t *gateQueue;
+    Spaceship* sp;
     
     void *mem_base_lcd;
     void *mem_base;
@@ -29,13 +30,9 @@ typedef struct{
     unsigned char previousHeadingAngle;
     unsigned char startingThrust;
 
-    Bonus *bonus;
-
-    char playerName[16];
     int generatorOffset;
     int score;
-
-
+    char playerName[16];
 
     double bonusChance;
     int gateGap;
@@ -78,6 +75,11 @@ void drawGame(Game* game);
 void createBonus(Game *game);
 
 /**
+ * Generates a gate on the right side, pseudo push of a linked list(maybe we will split it later)
+*/
+void generateGate(Game *game);
+
+/**
  * player has collided with bonus
  * returns: void
 */
@@ -94,6 +96,7 @@ void addScore(Game *game);
  * returns: void
  */
 void saveScore(int score, char *name);
+
 /**
  * destroys all current gates on the screen
  * returns: void
@@ -105,10 +108,6 @@ void destroyGates(Game* game);
  * returns: void
 */
 void cleanGame(Game *game);
-/**
- * Generates a gate on the right side, pseudo push of a linked list(maybe we will split it later)
-*/
-void generateGate(Game *game);
 
 /**
  * frees all memory allocated for game and it's components

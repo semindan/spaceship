@@ -1,22 +1,22 @@
 #ifndef __SCOREBOARD_H__
 #define __SCOREBOARD_H__
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
 #include "lowLevel.h"
 
 typedef struct {
-  char* name;
-  int value;
+    char* name;
+    int value;
 } Score;
 
 typedef struct{
-  Score** scores;
-  int count;
-  int capacity;
+    Score** scores;
+    int count;
+    int capacity;
 } ScoreArray;
 
 /** 

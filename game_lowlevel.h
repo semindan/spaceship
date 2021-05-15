@@ -33,11 +33,13 @@ void drawScore(void *gameStruct);
 void drawSpaceship(void *gameStruct, uint16_t* framebuffer);
 
 /**
- * lights yellow LEDs based on current thrust
-*/
-void showThrust(void *gameStruct);
-/**
  * lights RGB LEDs based on current hp
 */
 void showHP(void *gameStruct);
-#endif
+
+/**
+ * lights yellow LEDs based on current thrust
+*/
+void showThrust(void *gameStruct);
+
+#endif /* __GAME_LOWLEVEL_H__ */

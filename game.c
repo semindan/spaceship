@@ -13,22 +13,20 @@ void gameInit(Game *game) {
 
     game->spaceshipPos[0] = 0;
     game->spaceshipPos[1] = SCREEN_HEIGHT / 2;
+    game->previousHeadingAngle = getKnobBlueValue(game->mem_base);
+    game->startingThrust = getKnobGreenValue(game->mem_base);
 
-    game->generatorOffset = 0;
     game->gateQueue = create_queue(50);
     Gate *rootGate = malloc(sizeof(Gate));
     gateInit(rootGate);
     push_to_queue(game->gateQueue, rootGate);
-    game->bonus = NULL;
-
-    game->previousHeadingAngle = getKnobBlueValue(game->mem_base);
-    game->startingThrust = getKnobGreenValue(game->mem_base);
-
+    
     game->score = 0;
 
     game->framebuffer = (uint16_t *)malloc(sizeof(uint16_t) * SCREEN_HEIGHT * SCREEN_WIDTH);
 
-
+    game->bonus = NULL;
+    game->generatorOffset = 0;
     game->bonusChance = 0.01;
     game->gateGap = 100;
 }
@@ -86,13 +84,15 @@ void handleInput(Game *game) {
 bool update(Game *game) {
     addScore(game);
 
-
+    // check for exit button
     if(getKnobRedButton(game->mem_base)){
         game->sp->hp = 0;
         cleanGame(game);
         gameOverScreen(game);
         return false;
     }
+
+    // manage collisions
     if (hasCollided(game)) {
         game->sp->hp--;
 
@@ -108,21 +108,20 @@ bool update(Game *game) {
     
     spaceshipUpdate(game->sp);
     
+    // process gates
     if (game->gateQueue->size < 10 && ((double)rand() / (double)RAND_MAX) > 0.97) {
         generateGate(game);
     }
     updateGates(game->gateQueue, game->sp->engineThrust, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+    // handle in-game bonuses
     createBonus(game);
     game->bonus = updateBonus(game->bonus, game->sp->engineThrust);
     if(game->bonus != NULL){
-        if(hasPickedBonus(game)){
-           
-        if(game->sp->hp < game->sp->maxHP){
-        game->sp->hp++;
+        if(hasPickedBonus(game) && game->sp->hp < game->sp->maxHP){
+            game->sp->hp++;
         }
-        }
-    }
-    else{
+    } else {
         setLED2Color(0,0,0, game->mem_base);
     }
 
@@ -161,18 +160,14 @@ void drawGame(Game *game){
 
 /*  generates bonus under specific conditions   */
 void createBonus(Game *game) {
-
-    //game->generatorOffset = game->score;
     if(game->bonus == NULL && ((double)rand() / (double)RAND_MAX) < game->bonusChance){
         game->bonus =  generateBonus(game->spaceshipPos[1]);
-         setLED2Color(255,0,255, game->mem_base);
-        //game->generatorOffset = 0;
+        setLED2Color(255,0,255, game->mem_base);
     }
-    
-   
 }
+
+/*  generates new gate and stores it to queue   */
 void generateGate(Game *game){
-    
     srand(time(NULL));
 
     Gate *gate = malloc(sizeof(Gate));
@@ -182,15 +177,12 @@ void generateGate(Game *game){
     }
     gateInit(gate);
     
-
-    
     Gate *prevGate = get_from_queue( game->gateQueue,  game->gateQueue->tail-1);
     
-   
-    int minHeight = (int) (SCREEN_HEIGHT/10+game->gateGap);
-    int maxHeight = (int)( prevGate->gapH+game->gateGap);
+    int minHeight = (int) (SCREEN_HEIGHT/10 + game->gateGap);
+    int maxHeight = (int) (prevGate->gapH + game->gateGap);
     int minY = SCREEN_HEIGHT/4;
-    int maxY = (int)( prevGate->gapY+10);
+    int maxY = (int) (prevGate->gapY + 10);
 
     // random number in range rand() % (upper - lower + 1) + lower;
     gate->gapW = prevGate->gapW;
@@ -199,33 +191,35 @@ void generateGate(Game *game){
     gate->gapX = SCREEN_WIDTH;
     gate->gapY =  rand() % (maxY - minY + 1) + minY; 
     
-
     push_to_queue(game->gateQueue, gate);
 }
 
+/*  detect collision with bonuses using AABB   */
 bool hasPickedBonus(Game *game) {
-
-        // AABB collision
-        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= game->bonus->posX \
-        && SCREEN_WIDTH / 2 <= game->bonus->posX + game->bonus->width && !game->bonus->passed) {
-            game->bonus->passed = true;
-
-            if(game->spaceshipPos[1] + game->sp->sizeY >= game->bonus->posY\
-            && game->spaceshipPos[1] <= game->bonus->posY + game->bonus->height){
-                 game->bonus->color = getColor(0, 0, 0);
-                return true;
-            }
+    if (SCREEN_WIDTH / 2 + game->sp->sizeX >= game->bonus->posX && 
+        SCREEN_WIDTH / 2 <= game->bonus->posX + game->bonus->width && !game->bonus->passed) {
         
+        game->bonus->passed = true;
+
+        if(game->spaceshipPos[1] + game->sp->sizeY >= game->bonus->posY && 
+           game->spaceshipPos[1] <= game->bonus->posY + game->bonus->height){ 
+            
+            game->bonus->color = getColor(0, 0, 0);
+            return true;
         }
+    }
 
     return false;
 }
+
 /*  adds score to game if spaceship has passed a gate   */
 void addScore(Game *game) {
     for (int i = game->gateQueue->head; i < game->gateQueue->tail; i++) {
         Gate *g = get_from_queue(game->gateQueue, i);
         
-        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW && !g->passed) {
+        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && 
+            SCREEN_WIDTH / 2 <= g->gapX + g->gapW && !g->passed) {
+
             game->score++;
         }
     }
@@ -241,21 +235,25 @@ void saveScore(int score, char *name) {
     fclose(scores);
 }
 
-/*  free allocated memory   */
-void freeGame(Game *game) {
-    free(game->sp);
-    delete_queue(game->gateQueue);
-    free(game);
+/*  clears all gates    */
+void destroyGates(Game* game){
+    resetFrameBuffer(game->framebuffer);
+    drawSpaceship(game, game->framebuffer);
+    clean_queue(game->gateQueue);
 }
-void cleanGame(Game *game){
+
+/*  cleanup hardware after game  */
+void cleanGame(Game *game) {
     resetFrameBuffer(game->framebuffer);
     draw(game->mem_base_lcd, game->framebuffer);
     resetLedLine(game->mem_base);
     resetLED1Color(game->mem_base);
     resetLED2Color(game->mem_base);
 }
-void destroyGates(Game* game){
-    resetFrameBuffer(game->framebuffer);
-    drawSpaceship(game, game->framebuffer);
-    clean_queue(game->gateQueue);
+
+/*  free allocated memory   */
+void freeGame(Game *game) {
+    free(game->sp);
+    delete_queue(game->gateQueue);
+    free(game);
 }
