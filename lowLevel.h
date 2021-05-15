@@ -13,8 +13,8 @@
 #define LATENCY 150
 
 /*      SETS COLOR TO FIRST OR SECOND LED       */
-void setLED1Color(char red, char green, char blue);
-void setLED2Color(char red, char green, char blue, unsigned char* mem_base);
+void setLED1Color(char red, char green, char blue,  void * mem_base);
+void setLED2Color(char red, char green, char blue, void* mem_base);
 
 /*      RETURNS VALUE FROM SPECIFIED KNOB       */
 unsigned char getKnobBlueValue(void *mem_base);
@@ -47,4 +47,6 @@ int strWidth(char* c);
 void resetFrameBuffer(uint16_t*framebuffer);
 void setLedLine(void *mem_base, int activeLed);
 void resetLedLine(void *mem_base);
+void resetLED1Color(void * mem_base);
+void resetLED2Color(void * mem_base);
 #endif /* __LOWLEVEL_H__ */

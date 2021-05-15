@@ -73,3 +73,12 @@ void showThrust(void *gameStruct) {
     Game *game = (Game *) gameStruct;
     setLedLine(game->mem_base, round(game->sp->engineThrust/game->sp->maxThrust * 32));
 }
+void showHP(void *gameStruct){
+     Game *game = (Game *) gameStruct;
+     switch(game->sp->hp){
+         case 0: setLED1Color(0,0,0, game->mem_base); break;
+         case 1: setLED1Color(255,0,0, game->mem_base); break;
+         case 2: setLED1Color(255,165,0, game->mem_base); break;
+         default:setLED1Color(0,255,0, game->mem_base); break;
+     }
+}

@@ -16,6 +16,9 @@ void gameInit(Game *game) {
 
     game->gateCount = 0;
     game->gateQueue = create_queue(50);
+    Gate *rootGate = malloc(sizeof(Gate));
+    gateInit(rootGate);
+    push_to_queue(game->gateQueue, rootGate);
 
     game->previousHeadingAngle = getKnobBlueValue(game->mem_base);
     game->startingThrust = getKnobGreenValue(game->mem_base);
@@ -44,7 +47,7 @@ _Bool hasCollided(Game *game) {
             else {
                 return false;
             }
-        } else {
+        } else if(!g->isBonus) {
             g->color = getColor(0, 255, 0);
         }
     }
@@ -86,7 +89,7 @@ bool update(Game *game) {
             resetFrameBuffer(game->framebuffer);
             draw(game->mem_base_lcd, game->framebuffer);
             resetLedLine(game->mem_base);
-
+            resetLED1Color(game->mem_base);
             // switch to gameOverScreen()
             gameOverScreen(game);
             return false;
@@ -104,9 +107,13 @@ bool update(Game *game) {
     if (game->gateQueue->size < 10 && ((double)rand() / (double)RAND_MAX) > 0.9) {
         generateGate(game->gateQueue, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
-
-    createBonus(game);
     updateGates(game->gateQueue, game->sp->engineThrust, SCREEN_WIDTH, SCREEN_HEIGHT);
+    createBonus(game);
+    if(hasPickedBonus(game)){
+        if(game->sp->hp < game->sp->maxHP){
+        game->sp->hp++;
+        }
+    }
     
     // keep spaceship within world
     if (game->spaceshipPos[0] + game->sp->movementVec[0] < SCREEN_WIDTH - game->sp->sizeX && 
@@ -133,6 +140,7 @@ void drawGame(Game *game){
     drawScore(game);
     
     // draw on hardware
+    showHP(game);
     showThrust(game);
     draw(game->mem_base_lcd, game->framebuffer);
     
@@ -144,7 +152,6 @@ void drawGame(Game *game){
 void createBonus(Game *game) {
     if(((double)rand() / (double)RAND_MAX) > 0.99){
         Gate *gate = get_from_queue(game->gateQueue,game->gateQueue->tail-1);
-
         gate->isBonus = true;
         gate->gapW = 15;
         gate->gapH = 15;
@@ -154,7 +161,28 @@ void createBonus(Game *game) {
         gate->gapX = SCREEN_WIDTH;
     }
 }
+bool hasPickedBonus(Game *game) {
+    for (int i = game->gateQueue->head; i < game->gateQueue->tail; i++) {
+        Gate *g = get_from_queue(game->gateQueue, i);
+        
+        // AABB collision
+        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW && g->isBonus && !g->passed) {
+            g->passed = true;
 
+            if(game->spaceshipPos[1] + game->sp->sizeY >= g->gapY && game->spaceshipPos[1] <= g->gapY + g->gapH){
+                 g->color = getColor(0, 0, 0);
+                return true;
+            }
+            else {
+                return false;
+            }
+        } else if(g->isBonus && !g->passed) {
+            g->color = getColor(255, 0, 0);
+        }
+    }
+
+    return false;
+}
 /*  adds score to game if spaceship has passed a gate   */
 void addScore(Game *game) {
     for (int i = game->gateQueue->head; i < game->gateQueue->tail; i++) {

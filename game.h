@@ -70,6 +70,12 @@ void drawGame(Game* game);
 void createBonus(Game *game);
 
 /**
+ * player has collided with bonus
+ * returns: void
+*/
+bool hasPickedBonus(Game *game);
+
+/**
  * adds score to game if spaceship has passed a gate
  * returns: void
  */

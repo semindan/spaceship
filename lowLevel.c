@@ -7,15 +7,20 @@ void *initHardware(){
     return map_phys_address(SPILED_REG_BASE_PHYS, SPILED_REG_SIZE, 0);
 }
 
-void setLED1Color(char red, char green, char blue){
+void setLED1Color(char red, char green, char blue,  void * mem_base){
     uint32_t x = 0;
     x |= (uint32_t)red << 16;
     x |= (uint32_t)green << 8;
     x |= (uint32_t)blue;
-
+  *(volatile uint32_t*)(mem_base + SPILED_REG_LED_RGB1_o) = x;
 }
-
-void setLED2Color(char red, char green, char blue, unsigned char * mem_base){
+void resetLED1Color(void * mem_base){
+  *(volatile uint32_t*)(mem_base + SPILED_REG_LED_RGB1_o) = 0;
+}
+void resetLED2Color(void * mem_base){
+  *(volatile uint32_t*)(mem_base + SPILED_REG_LED_RGB1_o) = 0;
+}
+void setLED2Color(char red, char green, char blue, void * mem_base){
     uint32_t x = 0;
     x |= (uint32_t)red << 16;
     x |= (uint32_t)green << 8;
@@ -83,11 +88,11 @@ void setLedLine(void *mem_base, int activeLed){
     for(int i = 0; i < activeLed; i++){
      result = result | (1 << (32-i));
     }
-    *addr = result;
+    *(volatile uint32_t*)(addr) = result;
 }
 void resetLedLine(void *mem_base){
     uint32_t *addr =  mem_base+SPILED_REG_LED_LINE_o;
-    *addr = 0;
+    *(volatile uint32_t*)(addr)  = 0;
 }
 void draw(void* lcd_addr, uint16_t* framebuffer){
     parlcd_write_cmd(lcd_addr, 0x2c);

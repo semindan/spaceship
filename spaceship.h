@@ -17,6 +17,7 @@ typedef struct{
     double maxThrust;
 
     int hp;
+    int maxHP;
 } Spaceship;
 
 

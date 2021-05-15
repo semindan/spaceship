@@ -10,22 +10,27 @@ void generateGate(queue_t* gateQueue, int screenWidth, int screenHeight){
         exit(100);
     }
     gateInit(gate);
-
-    //TODO: randomize gates
-
-    //int spWidth = spDimensions[0];
-    //int spHeight = spDimensions[1];
     
+
+    
+    Gate *prevGate = get_from_queue( gateQueue,  gateQueue->tail-1);
+    
+    
+   
+    int minHeight = (int) (SCREEN_HEIGHT/10);
+    int maxHeight = (int)( prevGate->gapH+10);
+    int minY = SCREEN_HEIGHT/4;
+    int maxY = (int)( prevGate->gapY+10);
+
     // random number in range rand() % (upper - lower + 1) + lower;
-    gate->gapW = rand() % (screenWidth/20 - screenWidth/30 + 1) + screenWidth/30;
-    gate->gapH = rand() % (screenHeight - screenHeight/30 + 1) + screenHeight/30; 
+    gate->gapW = prevGate->gapW;
+    gate->gapH = (rand() % ( maxHeight - minHeight + 1)) + minHeight; 
 
-    gate->gapX = screenWidth;//screenWidth;
-    gate->gapY = screenHeight/5;//screenHeight;
+    gate->gapX = screenWidth;
+    gate->gapY =  rand() % (maxY - minY + 1) + minY; 
     
-    if(!push_to_queue(gateQueue, gate)){
-        printf("FULL\n");
-    }
+
+    push_to_queue(gateQueue, gate);
 }
 
 void updateGates(queue_t *gateQueue,double engineThrust, int screenWidth, int screenHeight){
@@ -60,8 +65,12 @@ Gate* getNearestGate(Gate* gate, int x){
 }
 
 void gateInit(Gate *gate){
-    gate->gapH = gate->gapW = 10;
-    gate->gapX = gate->gapY = 10;
+    gate->gapW = 10;
+    gate->gapH = SCREEN_HEIGHT/2;
+    
+    
+    gate->gapX = SCREEN_WIDTH;
+    gate->gapY = SCREEN_HEIGHT/4;
     gate->color = getColor(0,255,0);
     gate->passed = false;
     gate->isBonus = false;
