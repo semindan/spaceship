@@ -14,7 +14,7 @@ void gameInit(Game *game) {
     game->spaceshipPos[0] = 0;
     game->spaceshipPos[1] = SCREEN_HEIGHT / 2;
 
-    game->gateCount = 0;
+    game->generatorOffset = 0;
     game->gateQueue = create_queue(50);
     Gate *rootGate = malloc(sizeof(Gate));
     gateInit(rootGate);
@@ -86,37 +86,35 @@ bool update(Game *game) {
         game->sp->hp--;
 
         if (game->sp->hp <= 0) {
-            // cleanup of game
-            resetFrameBuffer(game->framebuffer);
-            draw(game->mem_base_lcd, game->framebuffer);
-            resetLedLine(game->mem_base);
-            resetLED1Color(game->mem_base);
-            // switch to gameOverScreen()
+            cleanGame(game);
             gameOverScreen(game);
             return false;
-
         } else {
-            resetFrameBuffer(game->framebuffer);
-            drawSpaceship(game, game->framebuffer);
-            clean_queue(game->gateQueue);
+            destroyGates(game);
             return true;
         }
     }
     
     spaceshipUpdate(game->sp);
     
-    if (game->gateQueue->size < 10 && ((double)rand() / (double)RAND_MAX) > 0.9) {
+    if (game->gateQueue->size < 10 && ((double)rand() / (double)RAND_MAX) > 0.97) {
         generateGate(game->gateQueue, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
     updateGates(game->gateQueue, game->sp->engineThrust, SCREEN_WIDTH, SCREEN_HEIGHT);
     createBonus(game);
-
-    if(hasPickedBonus(game)){
+    game->bonus = updateBonus(game->bonus, game->sp->engineThrust);
+    if(game->bonus != NULL){
+        if(hasPickedBonus(game)){
+           
         if(game->sp->hp < game->sp->maxHP){
         game->sp->hp++;
         }
+        }
     }
-    game->bonus = updateBonus(game->bonus, game->sp->engineThrust);
+    else{
+        setLED2Color(0,0,0, game->mem_base);
+    }
+
     // keep spaceship within world
     if (game->spaceshipPos[0] + game->sp->movementVec[0] < SCREEN_WIDTH - game->sp->sizeX && 
         game->spaceshipPos[0] + game->sp->movementVec[0] >= game->sp->sizeX) {
@@ -136,9 +134,9 @@ bool update(Game *game) {
 /*  draws game components to framebuffer and sends framebuffer to render    */
 void drawGame(Game *game){
     // draw stuff to framebuffer
-    drawBonus(game, game->framebuffer);
     drawSpaceship(game, game->framebuffer);
     drawGates(game, game->framebuffer);
+    drawBonus(game, game->framebuffer);
     drawScore(game);
     
     // draw on hardware
@@ -152,9 +150,15 @@ void drawGame(Game *game){
 
 /*  generates bonus under specific conditions   */
 void createBonus(Game *game) {
-    if(game->bonus == NULL){
-        game->bonus =  generateBonus(SCREEN_HEIGHT/2);
+
+    //game->generatorOffset = game->score;
+    if(game->bonus == NULL && ((double)rand() / (double)RAND_MAX) > 0.995){
+        game->bonus =  generateBonus(game->spaceshipPos[1]);
+         setLED2Color(255,0,255, game->mem_base);
+        //game->generatorOffset = 0;
     }
+    
+   
 }
 bool hasPickedBonus(Game *game) {
 
@@ -164,7 +168,7 @@ bool hasPickedBonus(Game *game) {
             game->bonus->passed = true;
 
             if(game->spaceshipPos[1] + game->sp->sizeY >= game->bonus->posY\
-            && game->spaceshipPos[1] <= game->bonus->posY + game->bonus->heigth){
+            && game->spaceshipPos[1] <= game->bonus->posY + game->bonus->height){
                  game->bonus->color = getColor(0, 0, 0);
                 return true;
             }
@@ -199,4 +203,16 @@ void freeGame(Game *game) {
     free(game->sp);
     delete_queue(game->gateQueue);
     free(game);
+}
+void cleanGame(Game *game){
+    resetFrameBuffer(game->framebuffer);
+    draw(game->mem_base_lcd, game->framebuffer);
+    resetLedLine(game->mem_base);
+    resetLED1Color(game->mem_base);
+    resetLED2Color(game->mem_base);
+}
+void destroyGates(Game* game){
+    resetFrameBuffer(game->framebuffer);
+    drawSpaceship(game, game->framebuffer);
+    clean_queue(game->gateQueue);
 }

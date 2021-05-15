@@ -18,7 +18,7 @@ void generateGate(queue_t* gateQueue, int screenWidth, int screenHeight){
     
    
     int minHeight = (int) (SCREEN_HEIGHT/10);
-    int maxHeight = (int)( prevGate->gapH+10);
+    int maxHeight = (int)( prevGate->gapH+100);
     int minY = SCREEN_HEIGHT/4;
     int maxY = (int)( prevGate->gapY+10);
 

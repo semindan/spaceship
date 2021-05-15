@@ -18,7 +18,7 @@ void resetLED1Color(void * mem_base){
   *(volatile uint32_t*)(mem_base + SPILED_REG_LED_RGB1_o) = 0;
 }
 void resetLED2Color(void * mem_base){
-  *(volatile uint32_t*)(mem_base + SPILED_REG_LED_RGB1_o) = 0;
+  *(volatile uint32_t*)(mem_base + SPILED_REG_LED_RGB2_o) = 0;
 }
 void setLED2Color(char red, char green, char blue, void * mem_base){
     uint32_t x = 0;

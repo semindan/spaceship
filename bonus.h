@@ -8,7 +8,7 @@ typedef struct{
     double posX;
     double posY;
     double width;
-    double heigth;
+    double height;
     uint16_t color;
     bool passed;
 } Bonus;

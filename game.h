@@ -32,7 +32,7 @@ typedef struct{
     Bonus *bonus;
 
     char playerName[16];
-    int gateCount;
+    int generatorOffset;
     int score;
 } Game;
 
@@ -89,6 +89,17 @@ void addScore(Game *game);
  * returns: void
  */
 void saveScore(int score, char *name);
+/**
+ * destroys all current gates on the screen
+ * returns: void
+*/
+void destroyGates(Game* game);
+
+/**
+ * turns off leds and makes screen black
+ * returns: void
+*/
+void cleanGame(Game *game)
 
 /**
  * frees all memory allocated for game and it's components

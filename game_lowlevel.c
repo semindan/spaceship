@@ -3,6 +3,10 @@
 /*  draws bonus to framebuffer as heart  */
 void drawBonus(void *gameStruct, uint16_t *framebuffer) {
     Game *game = (Game *) gameStruct;
+    if(game->bonus == NULL){
+        return;
+    }
+
             const char heart[] = 
                                  " $$$$$   $$$$$ "  
                                  "$$$$$$$ $$$$$$$"
@@ -11,9 +15,11 @@ void drawBonus(void *gameStruct, uint16_t *framebuffer) {
                                  "  $$$$$$$$$$$  "
                                  "    $$$$$$$    "
                                  "      $$$      ";
-            for (int y = game->bonus->posY; y < game->bonus->posY+game->bonus->heigth; y++) {
+            for (int y = game->bonus->posY; y < game->bonus->posY+game->bonus->height; y++) {
                 for (int x = game->bonus->posX; x < game->bonus->posX+game->bonus->width; x++) {
-                    if(heart[(int)((y-game->bonus->posY)*game->bonus->width) + (int)x-(int)game->bonus->width] == '$'){
+                   
+                    if(heart[(int)((y-game->bonus->posY)*game->bonus->width) + (int)x-(int)game->bonus->posX] == '$'){
+                        
                         game->framebuffer[y * SCREEN_WIDTH + x] = game->bonus->color;
                     }
                 }
@@ -60,7 +66,7 @@ void drawSpaceship(void *gameStruct, uint16_t *framebuffer) {
     Game *game = (Game *) gameStruct;
     for (int y = game->spaceshipPos[1]; y < game->spaceshipPos[1] + game->sp->sizeY; y++) {
         for (int x = SCREEN_WIDTH / 2; x < SCREEN_WIDTH / 2 + game->sp->sizeX; x++) {
-            framebuffer[y * SCREEN_WIDTH + x] = getColor(255, 0, 0);
+            framebuffer[y * SCREEN_WIDTH + x] = game->sp->image[(int)y-game->spaceshipPos[1]][(int) x-SCREEN_WIDTH/2];
         }
     }
 }
