@@ -3,13 +3,14 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <unistd.h>
 #include "mzapo_regs.h"
 #include "mzapo_parlcd.h"
 #include "mzapo_phys.h"
 #include "font_types.h"
 //#include "game.h"
 
-#define LATENCY 200
+#define LATENCY 150
 
 /*      SETS COLOR TO FIRST OR SECOND LED       */
 void setLED1Color(char red, char green, char blue);

@@ -7,6 +7,7 @@
 #include <unistd.h>
 
 #include "game_lowlevel.h"
+#include "gameover.h"
 #include "gate.h"
 #include "queue.h"
 #include "spaceship.h"
