@@ -32,24 +32,25 @@ char *getName(void *gameStruct) {
 
     int idx = 0;
     int nameIdx = 0;
+    int baseChar = 'a';
     //char alphabet[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
     unsigned char prevButton = getKnobBlueValue(game->mem_base);
 
     while (nameIdx < 16) {
         resetFrameBuffer(game->framebuffer);
         drawString(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, name, game->mem_base_lcd, game->framebuffer);
-        drawChar(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 8, 'a' + idx, getColor(0, 255, 255), game->mem_base_lcd, game->framebuffer);
+        drawChar(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 8, baseChar + idx, getColor(0, 0, 255), game->mem_base_lcd, game->framebuffer);
 
         // handle characters before letter
         for (int i = idx - 1; i >= 0; i--) {
             if (SCREEN_WIDTH / 2 - (idx - i) * 16 >= 8 && i >= 0) {
-                drawChar(SCREEN_WIDTH / 2 - (idx - i) * 16, SCREEN_HEIGHT / 8, 'a' + i, getColor(255, 255, 255), game->mem_base_lcd, game->framebuffer);
+                drawChar(SCREEN_WIDTH / 2 - (idx - i) * 16, SCREEN_HEIGHT / 8, baseChar + i, getColor(255, 255, 255), game->mem_base_lcd, game->framebuffer);
             }
         }
         // draw chars after letter
         for (int i = idx + 1; i < 26; i++) {
             if (SCREEN_WIDTH / 2 + (idx - i) * 16 < SCREEN_WIDTH - 8) {
-                drawChar(SCREEN_WIDTH / 2 + (i - idx) * 16, SCREEN_HEIGHT / 8, 'a' + i, getColor(255, 255, 255), game->mem_base_lcd, game->framebuffer);
+                drawChar(SCREEN_WIDTH / 2 + (i - idx) * 16, SCREEN_HEIGHT / 8, baseChar + i, getColor(255, 255, 255), game->mem_base_lcd, game->framebuffer);
             }
         }
 
@@ -59,16 +60,20 @@ char *getName(void *gameStruct) {
             unsigned char previousVal = prevButton;
             if (currentVal - previousVal > 5) {
                 idx++;
+                idx %= 26;
                 prevButton = currentVal;
             }
             else if (currentVal - previousVal < -5) {
                 idx--;
+                if(idx == -1){
+                    idx = 25;
+                }
                 prevButton = currentVal;
             }
         }
 
         if (getKnobBlueButton(game->mem_base)) {
-            name[nameIdx++] = 'a' + idx;
+            name[nameIdx++] = baseChar + idx;
         }
         if (getKnobRedButton(game->mem_base)) {
             break;

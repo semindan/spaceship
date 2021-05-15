@@ -40,7 +40,7 @@ void updateGates(queue_t *gateQueue,double engineThrust, int screenWidth, int sc
     for(; x < i; x++){
         Gate * gate = get_from_queue(gateQueue, x);
         gate->gapX -= abs(engineThrust);
-        if(gate->gapX + gate->gapW < 0 || gate->gapX > screenWidth){
+        if(gate->gapX + gate->gapW <= 0){
             Gate *gatePopped = pop_from_queue(gateQueue);
         }
         
@@ -49,20 +49,7 @@ void updateGates(queue_t *gateQueue,double engineThrust, int screenWidth, int sc
     
 }
 
-Gate* getNearestGate(Gate* gate, int x){
-    if(gate->next == NULL){
-        return gate;
-    }
 
-    double distA = fabs(gate->gapX - x);
-    double distB = fabs(gate->next->gapX - x);
-    
-    if(distA < distB){
-        return gate;
-    } else {
-        return getNearestGate(gate->next, x);
-    }
-}
 
 void gateInit(Gate *gate){
     gate->gapW = 10;
@@ -73,5 +60,4 @@ void gateInit(Gate *gate){
     gate->gapY = SCREEN_HEIGHT/4;
     gate->color = getColor(0,255,0);
     gate->passed = false;
-    gate->isBonus = false;
 }

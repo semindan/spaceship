@@ -16,7 +16,6 @@ typedef struct GateTag{
     struct GateTag *next;
     uint16_t color;
     bool passed;
-    bool isBonus;
 } Gate;
 
 
@@ -29,11 +28,6 @@ void generateGate(queue_t *gateQueue, int screenWidth, int screenHeight);
  * Deletes a gate if it's out of the screen, pseudo pop of a linked list(maybe we will split it later)
 */
 void updateGates(queue_t *gateQueue,  double engineThrust, int screenWidth, int screenHeight);
-
-/**
- * returns nearest gate to ship's x position
-*/
-Gate* getNearestGate(Gate* gate, int x);
 
 /**
  * Sets gate's properties to 0

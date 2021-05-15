@@ -3,9 +3,6 @@
 /*  draws bonus to framebuffer as heart  */
 void drawBonus(void *gameStruct, uint16_t *framebuffer) {
     Game *game = (Game *) gameStruct;
-    for(int i = game->gateQueue->head; i < game->gateQueue->tail; i++){
-        Gate * gate = get_from_queue(game->gateQueue, i);
-        if(gate->isBonus){
             const char heart[] = 
                                  " $$$$$   $$$$$ "  
                                  "$$$$$$$ $$$$$$$"
@@ -14,16 +11,16 @@ void drawBonus(void *gameStruct, uint16_t *framebuffer) {
                                  "  $$$$$$$$$$$  "
                                  "    $$$$$$$    "
                                  "      $$$      ";
-            for (int y = gate->gapY; y < gate->gapY+gate->gapH; y++) {
-                for (int x = gate->gapX; x < gate->gapX+gate->gapW; x++) {
-                    if(heart[(int)((y-gate->gapY)*gate->gapW) + (int)x- (int)gate->gapX] == '$'){
-                        game->framebuffer[y * SCREEN_WIDTH + x] = gate->color;
+            for (int y = game->bonus->posY; y < game->bonus->posY+game->bonus->heigth; y++) {
+                for (int x = game->bonus->posX; x < game->bonus->posX+game->bonus->width; x++) {
+                    if(heart[(int)((y-game->bonus->posY)*game->bonus->width) + (int)x-(int)game->bonus->width] == '$'){
+                        game->framebuffer[y * SCREEN_WIDTH + x] = game->bonus->color;
                     }
                 }
             }
-        }
+        
     }
-}
+
 
 /*  draws gate to framebuffer  */
 void drawGate(void *gateStruct, uint16_t *framebuffer) {
@@ -44,7 +41,7 @@ void drawGates(void *gameStruct, uint16_t *framebuffer) {
     for (int x = game->gateQueue->head; x < game->gateQueue->tail; x++) {
         Gate *gate = get_from_queue(game->gateQueue, x);
         
-        if (gate != NULL && !gate->isBonus) {
+        if (gate != NULL) {
             drawGate(gate, framebuffer);
         }
     }

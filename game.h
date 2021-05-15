@@ -11,6 +11,7 @@
 #include "gate.h"
 #include "queue.h"
 #include "spaceship.h"
+#include "bonus.h"
 
 #define THRUST_INCREMENT 0.1
 #define ROTATION_ANGLE 15.0
@@ -27,6 +28,8 @@ typedef struct{
     double spaceshipVelocity;
     unsigned char previousHeadingAngle;
     unsigned char startingThrust;
+
+    Bonus *bonus;
 
     char playerName[16];
     int gateCount;
