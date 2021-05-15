@@ -113,7 +113,6 @@ void drawScoreboard(ScoreArray* scores){
         }
 
         if (getKnobRedButton(mem_base)) {
-            usleep(200 * 1000);
             break;
         }
         draw(mem_base_lcd, framebuffer);
