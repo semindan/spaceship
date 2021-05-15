@@ -1,6 +1,6 @@
 #include "game.h"
 #include "scoreboard.h"
-
+#include "start_menu.h"
 #include <unistd.h>
 
 #define START_GAME 1
@@ -96,10 +96,18 @@ void scoreboard(){
     freeScoreArray(scoreArr);
 
 }
+void startMenu(){
+      Game* game;
+      game = (Game*) malloc(sizeof(Game));
+      gameInit(game);
+      setParameters(game);
+      gameLoop(game);
+      freeGame(game);
+}
 
 int main(int argc, char** argv){
 
-    Game* game;
+  
     // checks if file exists
     if(access("scores.txt", F_OK) != 0) {
     FILE *f = fopen("scores.txt", "w");
@@ -113,10 +121,7 @@ int main(int argc, char** argv){
             
 
             case START_GAME:
-            game = (Game*) malloc(sizeof(Game));
-            gameInit(game);
-            gameLoop(game);
-            freeGame(game);
+            startMenu();
             break;
             
             case SCOREBOARD:

@@ -7,6 +7,7 @@
 #include <assert.h>
 #include "queue.h"
 #include "lowLevel.h"
+#include "game.h"
 
 typedef struct GateTag{
     double gapX;
@@ -19,10 +20,7 @@ typedef struct GateTag{
 } Gate;
 
 
-/**
- * Generates a gate on the right side, pseudo push of a linked list(maybe we will split it later)
-*/
-void generateGate(queue_t *gateQueue, int screenWidth, int screenHeight);
+
 
 /**
  * Deletes a gate if it's out of the screen, pseudo pop of a linked list(maybe we will split it later)

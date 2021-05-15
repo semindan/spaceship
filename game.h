@@ -34,6 +34,11 @@ typedef struct{
     char playerName[16];
     int generatorOffset;
     int score;
+
+
+
+    double bonusChance;
+    int gateGap;
 } Game;
 
 /**
@@ -99,7 +104,11 @@ void destroyGates(Game* game);
  * turns off leds and makes screen black
  * returns: void
 */
-void cleanGame(Game *game)
+void cleanGame(Game *game);
+/**
+ * Generates a gate on the right side, pseudo push of a linked list(maybe we will split it later)
+*/
+void generateGate(Game *game);
 
 /**
  * frees all memory allocated for game and it's components

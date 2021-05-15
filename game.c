@@ -27,6 +27,10 @@ void gameInit(Game *game) {
     game->score = 0;
 
     game->framebuffer = (uint16_t *)malloc(sizeof(uint16_t) * SCREEN_HEIGHT * SCREEN_WIDTH);
+
+
+    game->bonusChance = 0.01;
+    game->gateGap = 100;
 }
 
 /*  runs through all gates and checks, if spaceship has collided using AABB collision   */
@@ -98,7 +102,7 @@ bool update(Game *game) {
     spaceshipUpdate(game->sp);
     
     if (game->gateQueue->size < 10 && ((double)rand() / (double)RAND_MAX) > 0.97) {
-        generateGate(game->gateQueue, SCREEN_WIDTH, SCREEN_HEIGHT);
+        generateGate(game);
     }
     updateGates(game->gateQueue, game->sp->engineThrust, SCREEN_WIDTH, SCREEN_HEIGHT);
     createBonus(game);
@@ -152,7 +156,7 @@ void drawGame(Game *game){
 void createBonus(Game *game) {
 
     //game->generatorOffset = game->score;
-    if(game->bonus == NULL && ((double)rand() / (double)RAND_MAX) > 0.995){
+    if(game->bonus == NULL && ((double)rand() / (double)RAND_MAX) < game->bonusChance){
         game->bonus =  generateBonus(game->spaceshipPos[1]);
          setLED2Color(255,0,255, game->mem_base);
         //game->generatorOffset = 0;
@@ -160,6 +164,38 @@ void createBonus(Game *game) {
     
    
 }
+void generateGate(Game *game){
+    
+    srand(time(NULL));
+
+    Gate *gate = malloc(sizeof(Gate));
+    if(gate == NULL){
+        printf("malloc error in gate.c\n");
+        exit(100);
+    }
+    gateInit(gate);
+    
+
+    
+    Gate *prevGate = get_from_queue( game->gateQueue,  game->gateQueue->tail-1);
+    
+   
+    int minHeight = (int) (SCREEN_HEIGHT/10);
+    int maxHeight = (int)( prevGate->gapH+game->gateGap);
+    int minY = SCREEN_HEIGHT/4;
+    int maxY = (int)( prevGate->gapY+10);
+
+    // random number in range rand() % (upper - lower + 1) + lower;
+    gate->gapW = prevGate->gapW;
+    gate->gapH = (rand() % ( maxHeight - minHeight + 1)) + minHeight; 
+
+    gate->gapX = SCREEN_WIDTH;
+    gate->gapY =  rand() % (maxY - minY + 1) + minY; 
+    
+
+    push_to_queue(game->gateQueue, gate);
+}
+
 bool hasPickedBonus(Game *game) {
 
         // AABB collision
