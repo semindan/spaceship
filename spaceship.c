@@ -17,8 +17,6 @@ void spaceshipInit(Spaceship* sp){
     sp->sizeX = 10;
     sp->sizeY = 10;
     sp->hp = 3;
-    sp->speedBoost = false;
-    sp->invincible = false;
     sp->maxThrust = 10;
 }
 

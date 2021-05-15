@@ -1,5 +1,6 @@
 #include "game.h"
 #include "scoreboard.h"
+
 #include <unistd.h>
 
 #define START_GAME 1
@@ -89,13 +90,13 @@ void gameLoop(Game* game){
 }
 void scoreboard(){
 
-    ScoreArray *scoreArr = loadScoreBoard();
+    ScoreArray *scoreArr = loadScoreboard();
     if(scoreArr == NULL){
         return;
     }
-    sortScoreBoard(scoreArr, 0, scoreArr->count-1);
-    saveScoreBoard(scoreArr);
-    drawScoreBoard(scoreArr);
+    sortScoreboard(scoreArr, 0, scoreArr->count-1);
+    saveScoreboard(scoreArr);
+    drawScoreboard(scoreArr);
     freeScoreArray(scoreArr);
 
 }

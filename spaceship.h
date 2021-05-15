@@ -17,8 +17,6 @@ typedef struct{
     double maxThrust;
 
     int hp;
-    bool speedBoost;
-    bool invincible;
 } Spaceship;
 
 

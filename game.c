@@ -1,9 +1,7 @@
-
 #include "game.h"
 
-void gameInit(Game *game)
-{
-
+/*  initializes all game values and components  */
+void gameInit(Game *game) {
     game->mem_base = initHardware();
     game->mem_base_lcd = initDisplay();
     parlcd_hx8357_init(game->mem_base_lcd);
@@ -27,352 +25,160 @@ void gameInit(Game *game)
     game->framebuffer = (uint16_t *)malloc(sizeof(uint16_t) * SCREEN_HEIGHT * SCREEN_WIDTH);
 }
 
-_Bool hasCollided(Game *game)
-{
-
-    for (int i = game->gateQueue->head; i < game->gateQueue->tail; i++)
-    {
-
+/*  runs through all gates and checks, if spaceship has collided using AABB collision   */
+_Bool hasCollided(Game *game) {
+    for (int i = game->gateQueue->head; i < game->gateQueue->tail; i++) {
         Gate *g = get_from_queue(game->gateQueue, i);
 
         // AABB collision
-        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW && !g->isBonus)
-        {
+        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW && !g->isBonus) {
             g->passed = true;
-            if (game->spaceshipPos[1] <= g->gapY)
-            {
+            if (game->spaceshipPos[1] <= g->gapY) {
                 g->color = getColor(0, 0, 255);
                 return true;
             }
-            else if (game->spaceshipPos[1] + game->sp->sizeY >= g->gapY + g->gapH)
-            {
+            else if (game->spaceshipPos[1] + game->sp->sizeY >= g->gapY + g->gapH) {
                 g->color = getColor(0, 0, 255);
                 return true;
             }
-            else
-            {
+            else {
                 return false;
             }
-        }
-        else
-        {
+        } else {
             g->color = getColor(0, 255, 0);
         }
     }
 
     return false;
 }
-void addScore(Game *game)
-{
-    for (int i = game->gateQueue->head; i < game->gateQueue->tail; i++)
-    {
 
-        Gate *g = get_from_queue(game->gateQueue, i);
-        
-        //printf("%f    %d\n", SCREEN_WIDTH/2 - g->gapX, g->passed);
-        
-     
-        
-        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW && !g->passed)
-        {
-            game->score++;
-            //g->passed = true;
-        }
-    }
-}
-
-void drawGame(Game *game)
-{
-
-    // draw stuff to framebuffer
-    drawSpaceship(game, game->framebuffer);
-    showThrust(game);
-    drawBonus(game, game->framebuffer);
-    drawGates(game, game->framebuffer);
-    drawScore(game);
-    
-    // render2screen
-    draw(game->mem_base_lcd, game->framebuffer);
-    //reset screen
-    resetFrameBuffer(game->framebuffer);
-}
-
-void handleInput(Game *game)
-{
-
+/*  handles input from player, processes input, stores values to game   */
+void handleInput(Game *game) {
     unsigned char curHeadingAngle = getKnobBlueValue(game->mem_base);
     double heading = (((double)curHeadingAngle - (double)game->previousHeadingAngle) / 255) * 360.f;
     game->previousHeadingAngle = curHeadingAngle;
 
-   
     unsigned char curThrust = getKnobGreenValue(game->mem_base);
     double deltaThrust = (double)(curThrust - game->startingThrust)*0.1;
     game->sp->headingAngle = heading;
    
     // add delta to thrust
     game->sp->engineThrust += (2*deltaThrust / 255) * game->sp->maxThrust;
-      if(game->sp->engineThrust > game->sp->maxThrust){
+    if(game->sp->engineThrust > game->sp->maxThrust){
         game->sp->engineThrust = game->sp->maxThrust;
         game->startingThrust = curThrust;
-    } else if(game->sp->engineThrust < 0){
+    } 
+    else if(game->sp->engineThrust < 0){
         game->sp->engineThrust = 0;
         game->startingThrust = curThrust;
     }
-
 }
 
-bool update(Game *game)
-{
+/*   updates score, checks for collisions, updates components and updates spaceships position in world  */
+bool update(Game *game) {
     addScore(game);
-    if (hasCollided(game))
-    {
+
+    if (hasCollided(game)) {
         game->sp->hp--;
 
-        if (game->sp->hp <= 0)
-        {
-            //clean game
+        if (game->sp->hp <= 0) {
+            // cleanup of game
             resetFrameBuffer(game->framebuffer);
             draw(game->mem_base_lcd, game->framebuffer);
             resetLedLine(game->mem_base);
+
+            // switch to gameOverScreen()
             gameOverScreen(game);
-            //save score
             return false;
-        }
-        else
-        {
+
+        } else {
             resetFrameBuffer(game->framebuffer);
             drawSpaceship(game, game->framebuffer);
             clean_queue(game->gateQueue);
             return true;
         }
     }
-
     
     spaceshipUpdate(game->sp);
     
-    if (game->gateQueue->size < 10 && ((double)rand() / (double)RAND_MAX) > 0.9)
-    {
+    if (game->gateQueue->size < 10 && ((double)rand() / (double)RAND_MAX) > 0.9) {
         generateGate(game->gateQueue, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
+
     createBonus(game);
     updateGates(game->gateQueue, game->sp->engineThrust, SCREEN_WIDTH, SCREEN_HEIGHT);
     
-    
-    
-    
-
-
-    if (game->spaceshipPos[0] + game->sp->movementVec[0] < SCREEN_WIDTH - game->sp->sizeX && game->spaceshipPos[0] + game->sp->movementVec[0] >= game->sp->sizeX)
-    {
-        game->spaceshipPos[0] += game->sp->movementVec[0];
-    }
-    else
-    {
+    // keep spaceship within world
+    if (game->spaceshipPos[0] + game->sp->movementVec[0] < SCREEN_WIDTH - game->sp->sizeX && 
+        game->spaceshipPos[0] + game->sp->movementVec[0] >= game->sp->sizeX) {
+            game->spaceshipPos[0] += game->sp->movementVec[0];
+    } else {
         game->spaceshipPos[0] = 0;
     }
-    if (game->spaceshipPos[1] + game->sp->movementVec[1] < SCREEN_HEIGHT - game->sp->sizeY && game->spaceshipPos[1] + game->sp->movementVec[1] >= 0)
-    {
-        game->spaceshipPos[1] += game->sp->movementVec[1];
+
+    if (game->spaceshipPos[1] + game->sp->movementVec[1] < SCREEN_HEIGHT - game->sp->sizeY && 
+        game->spaceshipPos[1] + game->sp->movementVec[1] >= 0) {
+            game->spaceshipPos[1] += game->sp->movementVec[1];
     }
 
     return true;
 }
 
-void freeGame(Game *game)
-{
-    free(game->sp);
-    delete_queue(game->gateQueue);
-    free(game);
-}
-void drawSpaceship(Game *game, uint16_t *framebuffer)
-{
-
-    for (int y = game->spaceshipPos[1]; y < game->spaceshipPos[1] + game->sp->sizeY; y++)
-    {
-        for (int x = SCREEN_WIDTH / 2; x < SCREEN_WIDTH / 2 + game->sp->sizeX; x++)
-        {
-            framebuffer[y * SCREEN_WIDTH + x] = getColor(255, 0, 0);
-        }
-    }
-}
-void drawGates(Game *game, uint16_t *framebuffer)
-{
-
-    for (int x = game->gateQueue->head; x < game->gateQueue->tail; x++)
-    {
-        Gate *gate = get_from_queue(game->gateQueue, x);
-        if (gate != NULL && !gate->isBonus)
-        {
-            drawGate(gate, framebuffer);
-        }
-    }
-}
-void drawGate(Gate *gate, uint16_t *framebuffer)
-{
-    for (int y = 0; y < SCREEN_HEIGHT; y++)
-    {
-        for (int x = 0; x < SCREEN_WIDTH; x++)
-        {
-            if (x < gate->gapX + gate->gapW && x >= gate->gapX && (y <= gate->gapY || y >= gate->gapH + gate->gapY))
-            {
-                framebuffer[y * SCREEN_WIDTH + x] = gate->color;
-            }
-        }
-    }
-}
-void showThrust(Game *game)
-{
-    setLedLine(game->mem_base, round(game->sp->engineThrust/game->sp->maxThrust * 32));
-}
-void drawScore(Game *game)
-{
-    char scoreStr[100];
-    sprintf(scoreStr, "%d", game->score);
-    drawString(100, 0, scoreStr, game->mem_base_lcd, game->framebuffer);
-}
-
-void saveScore(int score, char *name)
-{
-    FILE *scores = fopen("scores.txt", "a");
-    fprintf(scores, "%s %d\n", name, score);
-    fclose(scores);
-    // open txt
-    // write name and score
-}
-void gameOverScreen(Game *game)
-{
-
-    //show gameoverscreen
+/*  draws game components to framebuffer and sends framebuffer to render    */
+void drawGame(Game *game){
+    // draw stuff to framebuffer
+    drawSpaceship(game, game->framebuffer);
+    drawBonus(game, game->framebuffer);
+    drawGates(game, game->framebuffer);
+    drawScore(game);
     
-    char scoreStr[100];
-    sprintf(scoreStr, "%d" ,game->score);
-
-    drawString(SCREEN_WIDTH/2, SCREEN_HEIGHT/4, "GAME OVER!", game->mem_base_lcd, game->framebuffer);
-    drawString(SCREEN_WIDTH/4, SCREEN_HEIGHT/2, "score: ", game->mem_base_lcd, game->framebuffer );
-    drawString(SCREEN_WIDTH*3/4, SCREEN_HEIGHT/2, scoreStr, game->mem_base_lcd, game->framebuffer);
-
-
-
+    // draw on hardware
+    showThrust(game);
     draw(game->mem_base_lcd, game->framebuffer);
-    while(!getKnobRedButton(game->mem_base)){
-
-    }
-    usleep(200*1000);
-    //user writes name
-    char *name = getName(game);
-    saveScore(game->score, name);
-    free(name);
+    
+    //reset screen
+    resetFrameBuffer(game->framebuffer);
 }
-char *getName(Game *game)
-{
-    char *name = malloc(sizeof(char) * 16 + 1);
-    for (int i = 0; i < 16; i++)
-    {
-        name[i] = ' ';
-    }
-    name[16] = '\0';
-    int nameIdx = 0;
-    unsigned char prevButton = getKnobBlueValue(game->mem_base);
-    char alphabet[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-    int idx = 0;
 
-    while (nameIdx < 16)
-    {
-        resetFrameBuffer(game->framebuffer);
-        drawString(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, name, game->mem_base_lcd, game->framebuffer);
-        drawChar(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 8, alphabet[idx], getColor(0, 255, 255), game->mem_base_lcd, game->framebuffer);
-
-        // handle characters before letter
-        for (int i = idx - 1; i >= 0; i--)
-        {
-            if (SCREEN_WIDTH / 2 - (idx - i) * 16 >= 8)
-            {
-                drawChar(SCREEN_WIDTH / 2 - (idx - i) * 16, SCREEN_HEIGHT / 8, alphabet[i], getColor(255, 255, 255), game->mem_base_lcd, game->framebuffer);
-                //draw(game->mem_base_lcd, game->framebuffer);
-            }
-        }
-        // draw chars after letter
-        for (int i = idx + 1; i < 26; i++)
-        {
-
-            if (SCREEN_WIDTH / 2 + (idx - i) * 16 < SCREEN_WIDTH - 8)
-            {
-                drawChar(SCREEN_WIDTH / 2 + (i - idx) * 16, SCREEN_HEIGHT / 8, alphabet[i], getColor(255, 255, 255), game->mem_base_lcd, game->framebuffer);
-                //draw(game->mem_base_lcd, game->framebuffer);
-            }
-        }
-
-        if (getKnobBlueValue(game->mem_base) != prevButton)
-        {
-            unsigned char currentVal = getKnobBlueValue(game->mem_base);
-            unsigned char previousVal = prevButton;
-            if (currentVal - previousVal > 5)
-            {
-                idx++;
-                prevButton = currentVal;
-            }
-            else if (currentVal - previousVal < -5)
-            {
-                idx--;
-                prevButton = currentVal;
-            }
-        }
-
-        if (getKnobBlueButton(game->mem_base))
-        {
-            name[nameIdx++] = alphabet[idx];
-            usleep(200 * 1000);
-            //draw(game->mem_base_lcd, game->framebuffer);
-        }
-        if (getKnobRedButton(game->mem_base))
-        {
-            usleep(200 * 1000);
-            break;
-        }
-        draw(game->mem_base_lcd, game->framebuffer);
-    }
-    if(name[0] == ' '){
-        strcpy(name, "unknown");
-    }
-    return name;
-}
-void createBonus(Game *game){
-
+/*  generates bonus under specific conditions   */
+void createBonus(Game *game) {
     if(((double)rand() / (double)RAND_MAX) > 0.99){
         Gate *gate = get_from_queue(game->gateQueue,game->gateQueue->tail-1);
+
         gate->isBonus = true;
         gate->gapW = 15;
         gate->gapH = 15;
+
         // random number in range rand() % (upper - lower + 1) + lower;
         gate->gapY = rand() % (int )(game->spaceshipPos[1] + game->sp->sizeY - game->spaceshipPos[1] + 1) + game->spaceshipPos[1];
         gate->gapX = SCREEN_WIDTH;
     }
 }
-void drawBonus(Game *game, uint16_t *framebuffer)
-{
-    
-    for(int i = game->gateQueue->head; i < game->gateQueue->tail; i++){
-        Gate * gate = get_from_queue(game->gateQueue, i);
-        if(gate->isBonus){
-                const char heart[] = 
-                                     " $$$$$   $$$$$ "  
-                                     "$$$$$$$ $$$$$$$"
-                                     "$$$$$$$$$$$$$$$"
-                                     " $$$$$$$$$$$$$ "
-                                     "  $$$$$$$$$$$  "
-                                     "    $$$$$$$    "
-                                     "      $$$      ";
-                for (int y = gate->gapY; y < gate->gapY+gate->gapH; y++)
-                {
-                    for (int x = gate->gapX; x < gate->gapX+gate->gapW; x++)
-                    {
-                        if(heart[(int)((y-gate->gapY)*gate->gapW) + (int)x- (int)gate->gapX] == '$'){
-                                game->framebuffer[y * SCREEN_WIDTH + x] = gate->color;
-                        }
-                        
-                    }
-                }
+
+/*  adds score to game if spaceship has passed a gate   */
+void addScore(Game *game) {
+    for (int i = game->gateQueue->head; i < game->gateQueue->tail; i++) {
+        Gate *g = get_from_queue(game->gateQueue, i);
+        
+        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW && !g->passed) {
+            game->score++;
         }
     }
-    
+}
+
+/*  appends last score to file  */
+void saveScore(int score, char *name) {
+    FILE *scores = fopen("scores.txt", "a");
+    if(scores == NULL)
+        return;
+
+    fprintf(scores, "%s %d\n", name, score);
+    fclose(scores);
+}
+
+/*  free allocated memory   */
+void freeGame(Game *game) {
+    free(game->sp);
+    delete_queue(game->gateQueue);
+    free(game);
 }
