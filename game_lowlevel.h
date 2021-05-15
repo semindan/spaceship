@@ -10,31 +10,31 @@
 /**
  * draws bonus to framebuffer as heart
 */
-void drawBonus(Game *game, uint16_t *framebuffer);
+void drawBonus(void *gameStruct, uint16_t *framebuffer);
 
 /**
  * draws gate to framebuffer
 */
-void drawGate(Gate *gate, uint16_t*framebuffer);
+void drawGate(void *gateStruct, uint16_t*framebuffer);
 
 /**
  * calls drawing function for all gates
 */
-void drawGates(Game *game, uint16_t* framebuffer);
+void drawGates(void *gameStruct, uint16_t* framebuffer);
 
 /**
  * draws current score to top left corner of framebuffer
  */
-void drawScore(Game* game);
+void drawScore(void *gameStruct);
 
 /**
  * draws spaceship to framebuffer
 */
-void drawSpaceship(Game *game, uint16_t* framebuffer);
+void drawSpaceship(void *gameStruct, uint16_t* framebuffer);
 
 /**
  * lights yellow LEDs based on current thrust
 */
-void showThrust(Game *game);
+void showThrust(void *gameStruct);
 
 #endif

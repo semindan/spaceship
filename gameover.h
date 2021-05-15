@@ -8,12 +8,12 @@
  * draw screen for Game over and manages post game 
  * returns: void
  */
-void gameOverScreen(Game *game);
+void gameOverScreen(void *gameStruct);
 
 /**
  * manages simple UI for creating player's name and returns written name
  * returns: string of max size 16
  */
-char *getName(Game *game);
+char *getName(void *gameStruct);
 
 #endif

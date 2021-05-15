@@ -1,7 +1,8 @@
 #include "gameover.h"
 
 /*  draw screen for Game over and manages post game  */
-void gameOverScreen(Game *game){
+void gameOverScreen(void *gameStruct){
+    Game *game = (Game *) gameStruct;
     char scoreStr[100];
     sprintf(scoreStr, "%d" ,game->score);
 
@@ -22,7 +23,8 @@ void gameOverScreen(Game *game){
 }
 
 /*  manages simple UI for creating player's name and returns written name   */
-char *getName(Game *game) {
+char *getName(void *gameStruct) {
+    Game *game = (Game *) gameStruct;
     char *name = malloc(sizeof(char) * 16 + 1);
     for (int i = 0; i < 16; i++) {
         name[i] = ' ';

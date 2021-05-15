@@ -1,7 +1,8 @@
 #include "game_lowlevel.h"
 
 /*  draws bonus to framebuffer as heart  */
-void drawBonus(Game *game, uint16_t *framebuffer) {
+void drawBonus(void *gameStruct, uint16_t *framebuffer) {
+    Game *game = (Game *) gameStruct;
     for(int i = game->gateQueue->head; i < game->gateQueue->tail; i++){
         Gate * gate = get_from_queue(game->gateQueue, i);
         if(gate->isBonus){
@@ -25,7 +26,8 @@ void drawBonus(Game *game, uint16_t *framebuffer) {
 }
 
 /*  draws gate to framebuffer  */
-void drawGate(Gate *gate, uint16_t *framebuffer) {
+void drawGate(void *gateStruct, uint16_t *framebuffer) {
+    Gate *gate = (Gate *) gateStruct;
     for (int y = 0; y < SCREEN_HEIGHT; y++) {
         for (int x = 0; x < SCREEN_WIDTH; x++) {
             if (x < gate->gapX + gate->gapW && x >= gate->gapX && (
@@ -37,7 +39,8 @@ void drawGate(Gate *gate, uint16_t *framebuffer) {
 }
 
 /*  calls drawing function for all gates  */
-void drawGates(Game *game, uint16_t *framebuffer) {
+void drawGates(void *gameStruct, uint16_t *framebuffer) {
+    Game *game = (Game *) gameStruct;
     for (int x = game->gateQueue->head; x < game->gateQueue->tail; x++) {
         Gate *gate = get_from_queue(game->gateQueue, x);
         
@@ -48,14 +51,16 @@ void drawGates(Game *game, uint16_t *framebuffer) {
 }
 
 /*  draws current score to top left corner of framebuffer   */
-void drawScore(Game *game) {
+void drawScore(void *gameStruct) {
+    Game *game = (Game *) gameStruct;
     char scoreStr[100];
     sprintf(scoreStr, "%d", game->score);
     drawString(100, 0, scoreStr, game->mem_base_lcd, game->framebuffer);
 }
 
 /*  draws spaceship to framebuffer  */
-void drawSpaceship(Game *game, uint16_t *framebuffer) {
+void drawSpaceship(void *gameStruct, uint16_t *framebuffer) {
+    Game *game = (Game *) gameStruct;
     for (int y = game->spaceshipPos[1]; y < game->spaceshipPos[1] + game->sp->sizeY; y++) {
         for (int x = SCREEN_WIDTH / 2; x < SCREEN_WIDTH / 2 + game->sp->sizeX; x++) {
             framebuffer[y * SCREEN_WIDTH + x] = getColor(255, 0, 0);
@@ -64,6 +69,7 @@ void drawSpaceship(Game *game, uint16_t *framebuffer) {
 }
 
 /*  lights LEDs based on current thrust */
-void showThrust(Game *game) {
+void showThrust(void *gameStruct) {
+    Game *game = (Game *) gameStruct;
     setLedLine(game->mem_base, round(game->sp->engineThrust/game->sp->maxThrust * 32));
 }
