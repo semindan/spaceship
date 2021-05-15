@@ -109,7 +109,7 @@ int charWidth(int ch, font_descriptor_t *fdes) {
   }
   return width;
 }
-void drawChar(int x, int y, char ch, unsigned short color, void* lcd_addr, uint16_t* framebuffer){
+void drawChar(int x, int y, char ch, unsigned short color,  uint16_t* framebuffer){
   font_descriptor_t *fdes = &font_rom8x16;
   
   int w = charWidth(ch, fdes);
@@ -151,7 +151,7 @@ void drawPixelBig(int x, int y, unsigned short color,  uint16_t* framebuffer, in
     }
   }
 }
-void drawString(int x, int y, char*str,  unsigned char *mem_base_lcd, uint16_t *framebuffer){
+void drawString(int x, int y, char*str, uint16_t *framebuffer){
     
     int strLen = 0;
     while(str[strLen] != '\0'){
@@ -162,7 +162,7 @@ void drawString(int x, int y, char*str,  unsigned char *mem_base_lcd, uint16_t *
     int charX = x-(strLen/2)*16;
     int i = 0;
     while(i < strLen){
-        drawChar(charX + 16*i, y, str[i], getColor(255,255,255), mem_base_lcd, framebuffer);
+        drawChar(charX + 16*i, y, str[i], getColor(255,255,255), framebuffer);
         i++;
     }
     /*
@@ -173,7 +173,7 @@ void drawString(int x, int y, char*str,  unsigned char *mem_base_lcd, uint16_t *
 
     */
 }
-void drawRectangle(int x, int y, int len, uint16_t color,unsigned char *mem_base_lcd, uint16_t *framebuffer){
+void drawRectangle(int x, int y, int len, uint16_t color, uint16_t *framebuffer){
 
     int width = len + 32;
     int height = 32;

@@ -90,12 +90,12 @@ void drawScoreboard(ScoreArray* scores){
         resetFrameBuffer(framebuffer);
         
         for(int i = 0; i < len; i++){
-            drawString(SCREEN_WIDTH/4, SCREEN_HEIGHT*(i+1)/(len+1), scores->scores[i+ind]->name, mem_base_lcd,framebuffer);
+            drawString(SCREEN_WIDTH/4, SCREEN_HEIGHT*(i+1)/(len+1), scores->scores[i+ind]->name, framebuffer);
             
             char scoreVal[100];
             sprintf(scoreVal,"%d", scores->scores[i+ind]->value);
             
-            drawString(SCREEN_WIDTH*3/4, SCREEN_HEIGHT*(i+1)/(len+1), scoreVal, mem_base_lcd,framebuffer);
+            drawString(SCREEN_WIDTH*3/4, SCREEN_HEIGHT*(i+1)/(len+1), scoreVal, framebuffer);
         }
 
         if (getKnobBlueValue(mem_base) != prevKnobVal) {

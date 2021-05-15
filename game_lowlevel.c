@@ -58,7 +58,7 @@ void drawScore(void *gameStruct) {
     Game *game = (Game *) gameStruct;
     char scoreStr[100];
     sprintf(scoreStr, "%d", game->score);
-    drawString(100, 0, scoreStr, game->mem_base_lcd, game->framebuffer);
+    drawString(100, 0, scoreStr,  game->framebuffer);
 }
 
 /*  draws spaceship to framebuffer  */

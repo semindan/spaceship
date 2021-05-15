@@ -7,9 +7,9 @@ void gameOverScreen(void *gameStruct){
     sprintf(scoreStr, "%d" ,game->score);
 
     // show gameoverscreen
-    drawString(SCREEN_WIDTH/2, SCREEN_HEIGHT/4, "GAME OVER!", game->mem_base_lcd, game->framebuffer);
-    drawString(SCREEN_WIDTH/4, SCREEN_HEIGHT/2, "score: ", game->mem_base_lcd, game->framebuffer );
-    drawString(SCREEN_WIDTH*3/4, SCREEN_HEIGHT/2, scoreStr, game->mem_base_lcd, game->framebuffer);
+    drawString(SCREEN_WIDTH/2, SCREEN_HEIGHT/4, "GAME OVER!",  game->framebuffer);
+    drawString(SCREEN_WIDTH/4, SCREEN_HEIGHT/2, "score: ",  game->framebuffer );
+    drawString(SCREEN_WIDTH*3/4, SCREEN_HEIGHT/2, scoreStr,  game->framebuffer);
     draw(game->mem_base_lcd, game->framebuffer);
 
     // wait for input
@@ -38,19 +38,19 @@ char *getName(void *gameStruct) {
 
     while (nameIdx < 16) {
         resetFrameBuffer(game->framebuffer);
-        drawString(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, name, game->mem_base_lcd, game->framebuffer);
-        drawChar(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 8, baseChar + idx, getColor(0, 0, 255), game->mem_base_lcd, game->framebuffer);
+        drawString(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, name,  game->framebuffer);
+        drawChar(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 8, baseChar + idx, getColor(0, 0, 255),  game->framebuffer);
 
         // handle characters before letter
         for (int i = idx - 1; i >= 0; i--) {
             if (SCREEN_WIDTH / 2 - (idx - i) * 16 >= 8 && i >= 0) {
-                drawChar(SCREEN_WIDTH / 2 - (idx - i) * 16, SCREEN_HEIGHT / 8, baseChar + i, getColor(255, 255, 255), game->mem_base_lcd, game->framebuffer);
+                drawChar(SCREEN_WIDTH / 2 - (idx - i) * 16, SCREEN_HEIGHT / 8, baseChar + i, getColor(255, 255, 255),  game->framebuffer);
             }
         }
         // draw chars after letter
         for (int i = idx + 1; i < 26; i++) {
             if (SCREEN_WIDTH / 2 + (idx - i) * 16 < SCREEN_WIDTH - 8) {
-                drawChar(SCREEN_WIDTH / 2 + (i - idx) * 16, SCREEN_HEIGHT / 8, baseChar + i, getColor(255, 255, 255), game->mem_base_lcd, game->framebuffer);
+                drawChar(SCREEN_WIDTH / 2 + (i - idx) * 16, SCREEN_HEIGHT / 8, baseChar + i, getColor(255, 255, 255),  game->framebuffer);
             }
         }
 

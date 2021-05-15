@@ -37,12 +37,12 @@ uint16_t getColor(unsigned char red, unsigned char green, unsigned char blue);
 
 
 
-void drawChar(int x, int y, char ch, unsigned short color, void* lcd_addr, uint16_t* framebuffer);
+void drawChar(int x, int y, char ch, unsigned short color,  uint16_t* framebuffer);
 void drawPixel(int x, int y, unsigned short color, uint16_t* framebuffer);
 void drawPixelBig(int x, int y, unsigned short color,  uint16_t* framebuffer, int scale);
 int charWidth(int ch, font_descriptor_t *fdes);
-void drawString(int x, int y, char*str,  unsigned char *mem_base_lcd, uint16_t *framebuffer);
-void drawRectangle(int x, int y,int len, uint16_t color,unsigned char *mem_base_lcd, uint16_t *framebuffer);
+void drawString(int x, int y, char*str,  uint16_t *framebuffer);
+void drawRectangle(int x, int y,int len, uint16_t color, uint16_t *framebuffer);
 int strWidth(char* c);
 void resetFrameBuffer(uint16_t*framebuffer);
 void setLedLine(void *mem_base, int activeLed);

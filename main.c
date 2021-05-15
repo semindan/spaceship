@@ -22,14 +22,14 @@ int menu(){
     char *scoreBoard = "Scoreboard";
     char *exitGame = "Exit";
 
-    drawRectangle(SCREEN_WIDTH/2, SCREEN_HEIGHT/5, strWidth(startGame), getColor(0,0,255), mem_base_lcd, framebuffer);
-    drawString(SCREEN_WIDTH/2,SCREEN_HEIGHT/5,startGame,mem_base_lcd,framebuffer);
+    drawRectangle(SCREEN_WIDTH/2, SCREEN_HEIGHT/5, strWidth(startGame), getColor(0,0,255),  framebuffer);
+    drawString(SCREEN_WIDTH/2,SCREEN_HEIGHT/5,startGame,framebuffer);
 
-    drawRectangle(SCREEN_WIDTH/3,SCREEN_HEIGHT/2, strWidth(scoreBoard), getColor(0,255,0), mem_base_lcd, framebuffer);
-    drawString(SCREEN_WIDTH/3,SCREEN_HEIGHT/2,scoreBoard,mem_base_lcd,framebuffer);
+    drawRectangle(SCREEN_WIDTH/3,SCREEN_HEIGHT/2, strWidth(scoreBoard), getColor(0,255,0),  framebuffer);
+    drawString(SCREEN_WIDTH/3,SCREEN_HEIGHT/2,scoreBoard,framebuffer);
 
-    drawRectangle(SCREEN_WIDTH*3/4,SCREEN_HEIGHT/2, strWidth(exitGame),getColor(255,0,0), mem_base_lcd, framebuffer);
-    drawString(SCREEN_WIDTH*3/4,SCREEN_HEIGHT/2,exitGame,mem_base_lcd,framebuffer);
+    drawRectangle(SCREEN_WIDTH*3/4,SCREEN_HEIGHT/2, strWidth(exitGame),getColor(255,0,0),framebuffer);
+    drawString(SCREEN_WIDTH*3/4,SCREEN_HEIGHT/2,exitGame,framebuffer);
    
     
     draw(mem_base_lcd, framebuffer);
@@ -100,6 +100,7 @@ void startMenu(){
       Game* game;
       game = (Game*) malloc(sizeof(Game));
       gameInit(game);
+      
       setParameters(game);
       gameLoop(game);
       freeGame(game);

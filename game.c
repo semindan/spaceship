@@ -86,6 +86,13 @@ void handleInput(Game *game) {
 bool update(Game *game) {
     addScore(game);
 
+
+    if(getKnobRedButton(game->mem_base)){
+        game->sp->hp = 0;
+        cleanGame(game);
+        gameOverScreen(game);
+        return false;
+    }
     if (hasCollided(game)) {
         game->sp->hp--;
 
@@ -180,7 +187,7 @@ void generateGate(Game *game){
     Gate *prevGate = get_from_queue( game->gateQueue,  game->gateQueue->tail-1);
     
    
-    int minHeight = (int) (SCREEN_HEIGHT/10);
+    int minHeight = (int) (SCREEN_HEIGHT/10+game->gateGap);
     int maxHeight = (int)( prevGate->gapH+game->gateGap);
     int minY = SCREEN_HEIGHT/4;
     int maxY = (int)( prevGate->gapY+10);
