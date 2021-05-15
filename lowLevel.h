@@ -9,6 +9,7 @@
 #include "font_types.h"
 //#include "game.h"
 
+#define LATENCY 200
 
 /*      SETS COLOR TO FIRST OR SECOND LED       */
 void setLED1Color(char red, char green, char blue);

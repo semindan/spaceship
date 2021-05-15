@@ -34,21 +34,21 @@ unsigned char getKnobBlueValue(void *mem_base){
 }
 bool getKnobBlueButton(void *mem_base){
     uint32_t *addr =  mem_base+SPILED_REG_KNOBS_8BIT_o;
+    usleep(LATENCY * 1000);
     return (*addr) & 0x01000000;
-    //0000 0001 0000 0000 0000 0000 0000 0000;
-                  
+    //0000 0001 0000 0000 0000 0000 0000 0000;           
 }
 bool getKnobGreenButton(void *mem_base){
     uint32_t *addr =  mem_base+SPILED_REG_KNOBS_8BIT_o;
+    usleep(LATENCY * 1000);
     return (*addr) & 0x02000000;
-    //0000 0010 0000 0000 0000 0000 0000 0000;
-                  
+    //0000 0010 0000 0000 0000 0000 0000 0000;             
 }
 bool getKnobRedButton(void *mem_base){
     uint32_t *addr =  mem_base+SPILED_REG_KNOBS_8BIT_o;
+    usleep(LATENCY * 1000);
     return (*addr) & 0x04000000;
-    //0000 0100 0000 0000 0000 0000 0000 0000;
-                  
+    //0000 0100 0000 0000 0000 0000 0000 0000;           
 }
 
 

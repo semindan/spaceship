@@ -43,21 +43,17 @@ int menu(){
         if(getKnobBlueButton(mem_base_buttons)){
            resetFrameBuffer(framebuffer);
            draw(mem_base_lcd, framebuffer);
-           usleep(200000);
            return START_GAME;
         }
         if(getKnobGreenButton(mem_base_buttons)){
             resetFrameBuffer(framebuffer);
             draw(mem_base_lcd, framebuffer);
-           usleep(200000);
 
-           //scoreboard
            return SCOREBOARD;
         }
         if(getKnobRedButton(mem_base_buttons)){
             resetFrameBuffer(framebuffer);
             draw(mem_base_lcd, framebuffer);
-           usleep(200000);
 
             return EXIT;
         }
