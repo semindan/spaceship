@@ -15,4 +15,4 @@ typedef struct{
 
 
 Bonus* generateBonus(int y);
-void updateBonus(Bonus* bonus, double engineThrust);
+Bonus * updateBonus(Bonus* bonus, double engineThrust);

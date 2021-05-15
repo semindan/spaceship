@@ -110,12 +110,13 @@ bool update(Game *game) {
     }
     updateGates(game->gateQueue, game->sp->engineThrust, SCREEN_WIDTH, SCREEN_HEIGHT);
     createBonus(game);
+
     if(hasPickedBonus(game)){
         if(game->sp->hp < game->sp->maxHP){
         game->sp->hp++;
         }
     }
-    
+    game->bonus = updateBonus(game->bonus, game->sp->engineThrust);
     // keep spaceship within world
     if (game->spaceshipPos[0] + game->sp->movementVec[0] < SCREEN_WIDTH - game->sp->sizeX && 
         game->spaceshipPos[0] + game->sp->movementVec[0] >= game->sp->sizeX) {
@@ -151,7 +152,9 @@ void drawGame(Game *game){
 
 /*  generates bonus under specific conditions   */
 void createBonus(Game *game) {
-    generateBonus(SCREEN_HEIGHT/2);
+    if(game->bonus == NULL){
+        game->bonus =  generateBonus(SCREEN_HEIGHT/2);
+    }
 }
 bool hasPickedBonus(Game *game) {
 

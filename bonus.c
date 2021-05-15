@@ -10,13 +10,14 @@ Bonus* generateBonus(int y){
     bonus->passed = false;
     return bonus;
 }
-void updateBonus(Bonus* bonus, double engineThrust){
+Bonus * updateBonus(Bonus* bonus, double engineThrust){
 if(bonus != NULL){
     bonus->posX -= abs(engineThrust);
     if(bonus->posX + bonus->width < 0 ){
             free(bonus);
+            return NULL;
     }
 }
-    
+return bonus;
 
 }
