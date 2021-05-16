@@ -109,17 +109,19 @@ bool update(Game *game) {
     spaceshipUpdate(game->sp);
     
     // process gates
-    if (game->gateQueue->size < 10 && ((double)rand() / (double)RAND_MAX) > 0.97) {
+    
+    if (game->gateQueue->size < 10 && ((double)rand() / (double)RAND_MAX) > 0.94) {
         generateGate(game);
     }
     updateGates(game->gateQueue, game->sp->engineThrust, SCREEN_WIDTH, SCREEN_HEIGHT);
-
+    
     // handle in-game bonuses
     createBonus(game);
     game->bonus = updateBonus(game->bonus, game->sp->engineThrust);
     if(game->bonus != NULL){
         if(hasPickedBonus(game) && game->sp->hp < game->sp->maxHP){
             game->sp->hp++;
+            setLED2Color(0,0,0, game->mem_base);
         }
     } else {
         setLED2Color(0,0,0, game->mem_base);
@@ -144,9 +146,10 @@ bool update(Game *game) {
 /*  draws game components to framebuffer and sends framebuffer to render    */
 void drawGame(Game *game){
     // draw stuff to framebuffer
+    drawBonus(game, game->framebuffer);
     drawSpaceship(game, game->framebuffer);
     drawGates(game, game->framebuffer);
-    drawBonus(game, game->framebuffer);
+    
     drawScore(game);
     
     // draw on hardware

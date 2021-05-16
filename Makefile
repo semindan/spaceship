@@ -7,7 +7,7 @@ CXXFLAGS = -g -std=gnu++11 -O1 -Wall
 LDFLAGS = -lrt -lpthread 
 
 SOURCES = font_prop14x16.c font_rom8x16.c
-SOURCES += queue.c mzapo_phys.c mzapo_parlcd.c lowlevel.c start_menu.c
+SOURCES += queue.c mzapo_phys.c mzapo_parlcd.c lowlevel.c menu.c start_menu.c
 SOURCES += scoreboard.c gate.c spaceship.c gameover.c bonus.c
 SOURCES += game.c game_lowlevel.c 
 SOURCES += main.c

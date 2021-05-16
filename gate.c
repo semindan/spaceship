@@ -8,10 +8,11 @@ void updateGates(queue_t *gateQueue, double engineThrust, int screenWidth, int s
     for(; x < i; x++){
         Gate * gate = get_from_queue(gateQueue, x);
         gate->gapX -= abs(engineThrust);
-
+        
         if(gate->gapX + gate->gapW <= 0){
-            Gate *gatePopped = pop_from_queue(gateQueue);
+            pop_from_queue(gateQueue);
         }
+        
     }
 }
 

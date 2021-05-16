@@ -200,7 +200,7 @@ void drawString(int x, int y, char*str, uint16_t *framebuffer){
     }
 }
 
-/*  draws rectangle with set height to framebuffer  */
+/*  draws rectangle with set width to framebuffer  */
 void drawRectangle(int x, int y, int len, uint16_t color, uint16_t *framebuffer){
     int width = len + 32;
     int height = 32;

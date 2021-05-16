@@ -24,7 +24,7 @@ typedef struct GateTag{
 } Gate;
 
 /**
- * deletes a gate if it's out of the screen, pseudo pop of a linked list(maybe we will split it later)
+ * deletes a gate if it's out of the screen, pops it from the queue(maybe we will split it later)
 */
 void updateGates(queue_t *gateQueue,  double engineThrust, int screenWidth, int screenHeight);
 

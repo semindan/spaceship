@@ -75,7 +75,7 @@ void drawGame(Game* game);
 void createBonus(Game *game);
 
 /**
- * Generates a gate on the right side, pseudo push of a linked list(maybe we will split it later)
+ * Generates a gate on the right side, pushes it to gate queue(maybe we will split it later)
 */
 void generateGate(Game *game);
 

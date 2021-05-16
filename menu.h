@@ -16,6 +16,6 @@
 void renderMenu(unsigned char* mem_base_lcd, uint16_t* framebuffer);
 
 /*  handles buttons pressed in menu screen  */
-void handleMenuInput(unsigned char* mem_base_buttons, unsigned char* mem_base_lcd, uint16_t* framebuffer);
+int handleMenuInput(unsigned char* mem_base_buttons, unsigned char* mem_base_lcd, uint16_t* framebuffer);
 
 #endif /* __MENU_H__ */

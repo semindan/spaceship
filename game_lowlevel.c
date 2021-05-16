@@ -31,10 +31,23 @@ void drawBonus(void *gameStruct, uint16_t *framebuffer) {
 /*  draws gate to framebuffer  */
 void drawGate(void *gateStruct, uint16_t *framebuffer) {
     Gate *gate = (Gate *) gateStruct;
-    for (int y = 0; y < SCREEN_HEIGHT; y++) {
-        for (int x = 0; x < SCREEN_WIDTH; x++) {
-            if (x < gate->gapX + gate->gapW && x >= gate->gapX && (
-                y <= gate->gapY || y >= gate->gapH + gate->gapY)){
+
+    // draw upper part
+    for (int y = 0; y <= gate->gapY; y++) {
+        for (int x = gate->gapX; x < gate->gapX+gate->gapW; x++) {
+            if ( y < SCREEN_HEIGHT 
+                 &&  x >= 0 && x < SCREEN_WIDTH){
+
+                    framebuffer[y * SCREEN_WIDTH + x] = gate->color;
+            }
+        }
+    }
+
+    // draw lower part
+    for (int y = gate->gapH + gate->gapY; y < SCREEN_HEIGHT; y++) {
+        for (int x = gate->gapX; x < gate->gapX+gate->gapW; x++) {
+            if ( y >= 0
+                 &&  x >= 0 && x < SCREEN_WIDTH){
 
                     framebuffer[y * SCREEN_WIDTH + x] = gate->color;
             }

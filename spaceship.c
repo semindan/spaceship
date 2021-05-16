@@ -14,7 +14,7 @@ void spaceshipInit(Spaceship* sp){
     
     sp->headingAngle = 0.0;
     sp->engineThrust = 0.0;
-    sp->maxThrust = 10;
+    sp->maxThrust = 20;
 
     sp->sizeX = 23;
     sp->sizeY = 18;
