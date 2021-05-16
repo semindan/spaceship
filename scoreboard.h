@@ -6,7 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "lowLevel.h"
+#include "lowlevel.h"
 
 typedef struct {
     char* name;

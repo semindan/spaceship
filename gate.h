@@ -6,7 +6,7 @@
 #include <time.h>
 
 #include "game.h"
-#include "lowLevel.h"
+#include "lowlevel.h"
 #include "queue.h"
 
 typedef struct GateTag{

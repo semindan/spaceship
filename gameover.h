@@ -2,7 +2,7 @@
 #define __GAMEOVER_H__
 
 #include "game.h"
-#include "lowLevel.h"
+#include "lowlevel.h"
 
 /**
  * draw screen for Game over and manages post game 

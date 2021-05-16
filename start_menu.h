@@ -2,7 +2,7 @@
 #define __START_MENU_H__
 
 #include "game.h"
-#include "lowLevel.h"
+#include "lowlevel.h"
 #include "mzapo_phys.h"
 #include "mzapo_regs.h"
 

@@ -6,7 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "lowLevel.h"
+#include "lowlevel.h"
 
 #define START_GAME 1
 #define SCOREBOARD 2
