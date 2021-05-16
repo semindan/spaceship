@@ -274,6 +274,10 @@ void cleanGame(Game *game) {
 /*  free allocated memory   */
 void freeGame(Game *game) {
     free(game->sp);
+    if(game->bonus != NULL){
+        free(game->bonus);
+    }
     delete_queue(game->gateQueue);
+    free(game->framebuffer);
     free(game);
 }

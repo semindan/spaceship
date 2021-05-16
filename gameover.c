@@ -78,6 +78,9 @@ char *getName(void *gameStruct) {
         draw(game->mem_base_lcd, game->framebuffer);
     }
 
+    resetFrameBuffer(game->framebuffer);
+    draw(game->mem_base_lcd, game->framebuffer);
+
     if(name[0] == ' '){
         strcpy(name, "unknown");
     }

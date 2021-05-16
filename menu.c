@@ -24,21 +24,21 @@ int handleMenuInput(unsigned char* mem_base_buttons, unsigned char* mem_base_lcd
         if(getKnobBlueButton(mem_base_buttons)){
            resetFrameBuffer(framebuffer);
            draw(mem_base_lcd, framebuffer);
-
+           free(framebuffer);
            return START_GAME;
         }
 
         if(getKnobGreenButton(mem_base_buttons)){
             resetFrameBuffer(framebuffer);
             draw(mem_base_lcd, framebuffer);
-
-           return SCOREBOARD;
+            free(framebuffer);
+            return SCOREBOARD;
         }
         
         if(getKnobRedButton(mem_base_buttons)){
             resetFrameBuffer(framebuffer);
             draw(mem_base_lcd, framebuffer);
-
+            free(framebuffer);
             return EXIT;
         }
     }
