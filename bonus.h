@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "lowLevel.h"
+#include "lowlevel.h"
 
 typedef struct{
     double posX;

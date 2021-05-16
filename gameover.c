@@ -7,13 +7,15 @@ void gameOverScreen(void *gameStruct){
     sprintf(scoreStr, "%d" ,game->score);
 
     // show gameoverscreen
+    drawRectangle(SCREEN_WIDTH/2,SCREEN_HEIGHT*3/4, strWidth("Ok"),getColor(0,255,0), game->framebuffer);
+    drawString(SCREEN_WIDTH/2, SCREEN_HEIGHT*3/4, "Ok",  game->framebuffer);
     drawString(SCREEN_WIDTH/2, SCREEN_HEIGHT/4, "GAME OVER!",  game->framebuffer);
     drawString(SCREEN_WIDTH/4, SCREEN_HEIGHT/2, "score: ",  game->framebuffer );
     drawString(SCREEN_WIDTH*3/4, SCREEN_HEIGHT/2, scoreStr,  game->framebuffer);
     draw(game->mem_base_lcd, game->framebuffer);
 
     // wait for input
-    while(!getKnobRedButton(game->mem_base));
+    while(!getKnobGreenButton(game->mem_base));
 
     // user writes name
     char *name = getName(game);

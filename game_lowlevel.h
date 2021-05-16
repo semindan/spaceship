@@ -3,7 +3,7 @@
 
 #include "game.h"
 #include "gate.h"
-#include "lowLevel.h"
+#include "lowlevel.h"
 #include "queue.h"
 #include "spaceship.h"
 

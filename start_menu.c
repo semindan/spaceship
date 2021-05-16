@@ -11,7 +11,7 @@ void setupBonuses(Game* game, int idx) {
             break;
         case 1:
             drawString(SCREEN_WIDTH/4, SCREEN_HEIGHT/2, "Normal",  game->framebuffer);
-            game->bonusChance = 0.0005;
+            game->bonusChance = 0.005;
             break;
         case 2:
             drawString(SCREEN_WIDTH/4, SCREEN_HEIGHT/2, "High",  game->framebuffer);
@@ -56,7 +56,8 @@ void setParameters(Game *game) {
 
     while(true){
         resetFrameBuffer(game->framebuffer);
-
+        drawRectangle(SCREEN_WIDTH/2,SCREEN_HEIGHT*3/4, strWidth("Start"),getColor(0,0,255), game->framebuffer);
+        drawString(SCREEN_WIDTH/2, SCREEN_HEIGHT*3/4, "Start",  game->framebuffer);
         // handle input
         if(getKnobBlueButton(game->mem_base)){
             break;
