@@ -19,6 +19,7 @@
 typedef struct{
     Bonus *bonus;
     queue_t *gateQueue;
+    Gate *rootGate;
     Spaceship* sp;
     
     void *mem_base_lcd;

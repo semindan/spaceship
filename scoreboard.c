@@ -126,6 +126,7 @@ void drawScoreboard(ScoreArray *scores)
 
         draw(mem_base_lcd, framebuffer);
     }
+    free(framebuffer);
 }
 
 /* saves scoreboard to "scores.txt" */

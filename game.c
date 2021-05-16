@@ -22,14 +22,13 @@ void gameInit(Game *game) {
     game->startingThrust = getKnobGreenValue(game->mem_base);
 
     game->gateQueue = create_queue(50);
-    Gate *rootGate = malloc(sizeof(Gate));
-    if(rootGate == NULL){
+    game->rootGate = malloc(sizeof(Gate));
+    if(game->rootGate == NULL){
         fprintf(stderr, "Failed to allocate memory for new Gate\n");
         return;
     }
-
-    gateInit(rootGate);
-    push_to_queue(game->gateQueue, rootGate);
+    gateInit(game->rootGate);
+    push_to_queue(game->gateQueue, game->rootGate);
     
     game->score = 0;
 
@@ -278,6 +277,9 @@ void freeGame(Game *game) {
         free(game->bonus);
     }
     delete_queue(game->gateQueue);
+    if(game->rootGate != NULL){
+        free(game->rootGate);
+    }
     free(game->framebuffer);
     free(game);
 }
