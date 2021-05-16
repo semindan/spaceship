@@ -129,7 +129,7 @@ bool update(Game *game) {
     if (game->gateQueue->size < 30 && ((double)rand() / (double)RAND_MAX) > 0.94) {
         generateGate(game);
     }
-    updateGates(game->gateQueue, game->sp->engineThrust, SCREEN_WIDTH, SCREEN_HEIGHT);
+    updateGates(game->gateQueue, game->sp->engineThrust);
     
     // handle in-game bonuses
     createBonus(game);

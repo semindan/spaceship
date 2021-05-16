@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "game.h"
+
 #include "lowlevel.h"
 #include "queue.h"
 
@@ -26,7 +26,7 @@ typedef struct GateTag{
 /**
  * deletes a gate if it's out of the screen, pops it from the queue(maybe we will split it later)
 */
-void updateGates(queue_t *gateQueue,  double engineThrust, int screenWidth, int screenHeight);
+void updateGates(queue_t *gateQueue,  double engineThrust);
 
 /**
  * initializes gate with default values 

@@ -1,7 +1,7 @@
 #include "gate.h"
 
 /*  updates position of all gates   */
-void updateGates(queue_t *gateQueue, double engineThrust, int screenWidth, int screenHeight) {
+void updateGates(queue_t *gateQueue, double engineThrust) {
     int x = gateQueue->head;
     int i = gateQueue->tail;
 
