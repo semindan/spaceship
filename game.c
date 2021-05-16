@@ -7,6 +7,11 @@ void gameInit(Game *game) {
     parlcd_hx8357_init(game->mem_base_lcd);
 
     game->sp = (Spaceship *)malloc(sizeof(Spaceship));
+    if(game->sp == NULL){
+        fprintf(stderr, "Error in allocating memory for spaceship\n");
+        return;
+    }
+
     game->sp->dimensionsVec[0] = SCREEN_WIDTH / 10;  //to be updated
     game->sp->dimensionsVec[1] = SCREEN_HEIGHT / 10; //to be updated according to the screen size
     spaceshipInit(game->sp);
@@ -18,12 +23,21 @@ void gameInit(Game *game) {
 
     game->gateQueue = create_queue(50);
     Gate *rootGate = malloc(sizeof(Gate));
+    if(rootGate == NULL){
+        fprintf(stderr, "Failed to allocate memory for new Gate\n");
+        return;
+    }
+
     gateInit(rootGate);
     push_to_queue(game->gateQueue, rootGate);
     
     game->score = 0;
 
     game->framebuffer = (uint16_t *)malloc(sizeof(uint16_t) * SCREEN_HEIGHT * SCREEN_WIDTH);
+    if(game->framebuffer == NULL){
+        fprintf(stderr, "Failed to allocate framebuffer, terminating program\n");
+        exit(1);
+    }
 
     game->bonus = NULL;
     game->generatorOffset = 0;
@@ -35,6 +49,9 @@ void gameInit(Game *game) {
 _Bool hasCollided(Game *game) {
     for (int i = game->gateQueue->head; i < game->gateQueue->tail; i++) {
         Gate *g = get_from_queue(game->gateQueue, i);
+        if(g == NULL){
+            return false;
+        }
 
         // AABB collision
         if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW) {
@@ -109,7 +126,6 @@ bool update(Game *game) {
     spaceshipUpdate(game->sp);
     
     // process gates
-    
     if (game->gateQueue->size < 10 && ((double)rand() / (double)RAND_MAX) > 0.94) {
         generateGate(game);
     }

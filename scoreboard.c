@@ -112,6 +112,8 @@ void drawScoreboard(ScoreArray* scores){
 /* saves scoreboard to "scores.txt" */
 void saveScoreboard(ScoreArray* sa){
     FILE *f = fopen("scores.txt", "w");
+    if(f == NULL)
+        return;
 
     fscanf(f,"%d\n", &sa->count);
     for(int i = 0; i < sa->count; i++){

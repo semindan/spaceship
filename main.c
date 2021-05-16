@@ -19,16 +19,14 @@ int menu(){
 /*  gameloop checks input, updates game and draws it to the display */
 void gameLoop(Game* game) {
 
-while(true)
-{
-    handleInput(game);
-    
-     if(!update(game)){
+    while(true) {
+        handleInput(game);
+        if(!update(game)){
             printf("GAMEOVER\n");
             return; 
-            }
-    drawGame(game);
-}
+        }
+        drawGame(game);
+    }
 
 }
 
