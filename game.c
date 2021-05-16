@@ -127,7 +127,7 @@ bool update(Game *game) {
     // process gates
     // magic constants: optimal number of gates on the screen, good chance of generation 
     if (game->gateQueue->size < 30 && ((double)rand() / (double)RAND_MAX) > 0.94) {
-        generateGate(game);
+        generateGate(game->gateQueue, game->gateGap);
     }
     updateGates(game->gateQueue, game->sp->engineThrust);
     
@@ -183,34 +183,6 @@ void createBonus(Game *game) {
         game->bonus =  generateBonus(game->spaceshipPos[1]);
         setLED2Color(255,0,255, game->mem_base);
     }
-}
-
-/*  generates new gate and stores it to queue   */
-void generateGate(Game *game){
-    srand(time(NULL));
-
-    Gate *gate = malloc(sizeof(Gate));
-    if(gate == NULL){
-        printf("malloc error in gate.c\n");
-        exit(100);
-    }
-    gateInit(gate);
-    
-    Gate *prevGate = get_from_queue( game->gateQueue,  game->gateQueue->tail-1);
-    
-    int minHeight = (int) (SCREEN_HEIGHT/10 + game->gateGap);
-    int maxHeight = (int) (prevGate->gapH + game->gateGap);
-    int minY = SCREEN_HEIGHT/4;
-    int maxY = (int) (prevGate->gapY + 10);
-
-    // random number in range rand() % (upper - lower + 1) + lower;
-    gate->gapW = prevGate->gapW;
-    gate->gapH = (rand() % ( maxHeight - minHeight + 1)) + minHeight; 
-
-    gate->gapX = SCREEN_WIDTH;
-    gate->gapY =  rand() % (maxY - minY + 1) + minY; 
-    
-    push_to_queue(game->gateQueue, gate);
 }
 
 /*  detect collision with bonuses using AABB   */

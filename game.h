@@ -76,11 +76,6 @@ void drawGame(Game* game);
 void createBonus(Game *game);
 
 /**
- * Generates a gate on the right side, pushes it to gate queue(maybe we will split it later)
-*/
-void generateGate(Game *game);
-
-/**
  * player has collided with bonus
  * returns: void
 */

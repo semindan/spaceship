@@ -27,7 +27,10 @@ typedef struct GateTag{
  * deletes a gate if it's out of the screen, pops it from the queue(maybe we will split it later)
 */
 void updateGates(queue_t *gateQueue,  double engineThrust);
-
+/**
+ * Generates a gate on the right side, pushes it to gate queue(maybe we will split it later)
+*/
+void generateGate(queue_t *gateQueue, int gateGap);
 /**
  * initializes gate with default values 
 */

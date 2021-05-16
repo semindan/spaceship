@@ -32,11 +32,8 @@ void* pop_from_queue(queue_t *queue){
 
 void clean_queue(queue_t *queue){
     for(int i = queue->head; i < queue->tail; i++){
-    
-        void * popped = pop_from_queue(queue);
-        if(popped != NULL){
-            free(popped);
-        }
+
+        pop_from_queue(queue);
     }
 }
 
