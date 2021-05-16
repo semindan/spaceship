@@ -1,4 +1,4 @@
-#include "lowLevel.h"
+#include "lowlevel.h"
 
 /*  maps physical addresses for LCD display */
 void *initDisplay(){
