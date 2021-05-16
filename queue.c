@@ -42,7 +42,10 @@ void* get_from_queue(queue_t *queue, int idx){
 }
 
 void delete_queue(queue_t *queue){
-    clean_queue(queue);
+    for(int i = queue->head; i < queue->tail; i++){
+        void * element = get_from_queue(queue, i);
+        free(element);
+    }
     free(queue->array);
     queue->size = queue->head = queue->tail = 0;
     free(queue);

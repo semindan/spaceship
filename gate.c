@@ -11,6 +11,7 @@ void updateGates(queue_t *gateQueue, double engineThrust) {
         
         if(gate->gapX + gate->gapW <= 0){
             pop_from_queue(gateQueue);
+            free(gate);
         }
         
     }
