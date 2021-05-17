@@ -9,14 +9,12 @@
 #include "lowlevel.h"
 #include "queue.h"
 
-typedef struct GateTag{
+typedef struct{
     double gapX;
     double gapY;
 
     double gapW;
     double gapH;
-
-    struct GateTag *next;
 
     uint16_t color;
 

@@ -25,7 +25,7 @@ void generateGate(queue_t *gateQueue, int gateGap)
     }
     gateInit(gate);
 
-    Gate *prevGate = get_from_queue(gateQueue, gateQueue->tail - 1);
+    Gate *prevGate = (Gate *) get_from_queue(gateQueue, gateQueue->tail - 1);
     if (prevGate != NULL)
     {
         
@@ -68,20 +68,22 @@ void gateInit(Gate *gate)
 /*     pops gates that are out of screen    */
 void popGates(queue_t *gateQueue){
     
-     int x = gateQueue->head;
-    int i = gateQueue->tail;
+   
+    
+        Gate *gate = get_from_queue(gateQueue, gateQueue->head);
+        if(gate == NULL){
+            return;
+        }
 
-    for (; x < i; x++)
-    {
-        Gate *gate = get_from_queue(gateQueue, x);
         // if gate isn't on screen 
-        if (gate->gapX + gate->gapW <= 0)
+        while (gate->gapX + gate->gapW <= 0)
         {
             Gate *poppedGate = pop_from_queue(gateQueue);
             if(poppedGate != NULL){
                 free(poppedGate);
             }
+            gate = get_from_queue(gateQueue, gateQueue->head);
         }
-    }
+    
     
 }
