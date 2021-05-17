@@ -125,11 +125,15 @@ bool update(Game *game) {
     spaceshipUpdate(game->sp);
     
     // process gates
-    // magic constants: optimal number of gates on the screen, good chance of generation 
-    if (game->gateQueue->size < 30 && ((double)rand() / (double)RAND_MAX) > 0.94) {
+    // magic constant: optimal chance of gate generation 
+    if (game->gateQueue->size < game->gateQueue->capacity && ((double)rand() / (double)RAND_MAX) > 0.94) {
         generateGate(game->gateQueue, game->gateGap);
     }
+    else{
+        popGates(game->gateQueue);
+    }
     updateGates(game->gateQueue, game->sp->engineThrust);
+
     
     // handle in-game bonuses
     createBonus(game);

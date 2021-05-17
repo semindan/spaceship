@@ -28,10 +28,16 @@ void generateGate(queue_t *gateQueue, int gateGap)
     Gate *prevGate = get_from_queue(gateQueue, gateQueue->tail - 1);
     if (prevGate != NULL)
     {
+        
+        int minY = (int)(prevGate->gapY - 10) < SCREEN_HEIGHT/8 ? SCREEN_HEIGHT/4 : (int)(prevGate->gapY - 10);
+        int maxY = (int)(prevGate->gapY + 10) >= SCREEN_HEIGHT*7/8 ? SCREEN_HEIGHT/2 : (int)(prevGate->gapY + 10);
         int minHeight = (int)(SCREEN_HEIGHT / 10 + gateGap);
         int maxHeight = (int)(prevGate->gapH + gateGap);
-        int minY = (int)(prevGate->gapY - 10) < 0 ? 0 : (int)(prevGate->gapY - 10);
-        int maxY = (int)(prevGate->gapY + 10) >= SCREEN_HEIGHT ? SCREEN_HEIGHT/2 : (int)(prevGate->gapY + 10);
+
+        if(minY + minHeight >= SCREEN_HEIGHT){
+            minY = 0;
+            minHeight = 0;
+        }
 
         // random number in range rand() % (upper - lower + 1) + lower;
         gate->gapW = prevGate->gapW;
