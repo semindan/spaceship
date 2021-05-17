@@ -13,8 +13,10 @@ void updateGates(queue_t *gateQueue, double engineThrust)
 
         if (gate->gapX + gate->gapW <= 0)
         {
-            pop_from_queue(gateQueue);
-            free(gate);
+            Gate *poppedGate = pop_from_queue(gateQueue);
+            if(poppedGate != NULL){
+                free(poppedGate);
+            }
         }
     }
 }
@@ -36,8 +38,8 @@ void generateGate(queue_t *gateQueue, int gateGap)
     {
         int minHeight = (int)(SCREEN_HEIGHT / 10 + gateGap);
         int maxHeight = (int)(prevGate->gapH + gateGap);
-        int minY = SCREEN_HEIGHT / 4;
-        int maxY = (int)(prevGate->gapY + 10);
+        int minY = (int)(prevGate->gapY - 10) < 0 ? 0 : (int)(prevGate->gapY - 10);
+        int maxY = (int)(prevGate->gapY + 10) >= SCREEN_HEIGHT ? SCREEN_HEIGHT/2 : (int)(prevGate->gapY + 10);
 
         // random number in range rand() % (upper - lower + 1) + lower;
         gate->gapW = prevGate->gapW;
