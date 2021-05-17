@@ -32,6 +32,10 @@ void updateGates(queue_t *gateQueue,  double engineThrust);
 */
 void generateGate(queue_t *gateQueue, int gateGap);
 /**
+ * Pops gates that are out of screen
+*/
+void popGates(queue_t *gateQueue);
+/**
  * initializes gate with default values 
 */
 void gateInit(Gate *gate);

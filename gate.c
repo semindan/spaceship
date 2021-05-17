@@ -10,14 +10,6 @@ void updateGates(queue_t *gateQueue, double engineThrust)
     {
         Gate *gate = get_from_queue(gateQueue, x);
         gate->gapX -= abs(engineThrust);
-
-        if (gate->gapX + gate->gapW <= 0)
-        {
-            Gate *poppedGate = pop_from_queue(gateQueue);
-            if(poppedGate != NULL){
-                free(poppedGate);
-            }
-        }
     }
 }
 /*  generates new gate and stores it to queue   */
@@ -50,7 +42,10 @@ void generateGate(queue_t *gateQueue, int gateGap)
 
     
 
-    push_to_queue(gateQueue, gate);
+    if(!push_to_queue(gateQueue, gate)){
+        popGates(gateQueue);
+    }
+    
 }
 /*  initializes gate with default values    */
 void gateInit(Gate *gate)
@@ -63,4 +58,24 @@ void gateInit(Gate *gate)
 
     gate->color = getColor(0, 255, 0);
     gate->passed = false;
+}
+/*     pops gates that are out of screen    */
+void popGates(queue_t *gateQueue){
+    
+     int x = gateQueue->head;
+    int i = gateQueue->tail;
+
+    for (; x < i; x++)
+    {
+        Gate *gate = get_from_queue(gateQueue, x);
+        // if gate isn't on screen 
+        if (gate->gapX + gate->gapW <= 0)
+        {
+            Gate *poppedGate = pop_from_queue(gateQueue);
+            if(poppedGate != NULL){
+                free(poppedGate);
+            }
+        }
+    }
+    
 }
