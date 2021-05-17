@@ -53,7 +53,7 @@ _Bool hasCollided(Game *game) {
         }
 
         // AABB collision
-        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW) {
+        if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && SCREEN_WIDTH / 2 <= g->gapX + g->gapW && !g->passed) {
             g->passed = true;
             if (game->spaceshipPos[1] <= g->gapY) {
                 g->color = getColor(0, 0, 255);

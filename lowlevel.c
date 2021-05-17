@@ -171,7 +171,7 @@ void resetFrameBuffer(uint16_t*framebuffer){
 /*  draws colored pixel to framebuffer  */
 void drawPixel(int x, int y, unsigned short color, uint16_t* framebuffer) {
     if (x >=0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
-        framebuffer[x + 480*y] = color;
+        framebuffer[x + SCREEN_WIDTH*y] = color;
     }
 }
 

@@ -12,7 +12,7 @@ SOURCES += scoreboard.c gate.c spaceship.c gameover.c bonus.c
 SOURCES += game.c game_lowlevel.c 
 SOURCES += main.c
 TARGET_EXE = spaceship
-TARGET_IP = 192.168.0.85
+TARGET_IP ?= 192.168.0.85
 ifeq ($(TARGET_IP),)
 ifneq ($(filter debug run,$(MAKECMDGOALS)),)
 $(warning The target IP address is not set)
