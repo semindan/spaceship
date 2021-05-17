@@ -68,22 +68,20 @@ void gateInit(Gate *gate)
 /*     pops gates that are out of screen    */
 void popGates(queue_t *gateQueue){
     
-   
-    
-        Gate *gate = get_from_queue(gateQueue, gateQueue->head);
-        if(gate == NULL){
-            return;
-        }
+     int x = gateQueue->head;
+    int i = gateQueue->tail;
 
+    for (; x < i; x++)
+    {
+        Gate *gate = (Gate *)get_from_queue(gateQueue, x);
         // if gate isn't on screen 
-        while (gate->gapX + gate->gapW <= 0)
+        if (gate->gapX + gate->gapW <= 0)
         {
             Gate *poppedGate = pop_from_queue(gateQueue);
             if(poppedGate != NULL){
                 free(poppedGate);
             }
-            gate = get_from_queue(gateQueue, gateQueue->head);
         }
-    
+    }
     
 }
