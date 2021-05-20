@@ -211,6 +211,9 @@ bool hasPickedBonus(Game *game) {
 void addScore(Game *game) {
     for (int i = game->gateQueue->head; i < game->gateQueue->tail; i++) {
         Gate *g = get_from_queue(game->gateQueue, i);
+        if(g == NULL){
+            continue;
+        }
         
         if (SCREEN_WIDTH / 2 + game->sp->sizeX >= g->gapX && 
             SCREEN_WIDTH / 2 <= g->gapX + g->gapW && !g->passed) {

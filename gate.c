@@ -9,7 +9,10 @@ void updateGates(queue_t *gateQueue, double engineThrust)
     for (; x < i; x++)
     {
         Gate *gate = get_from_queue(gateQueue, x);
-        gate->gapX -= abs(engineThrust);
+        if(gate != NULL){
+            gate->gapX -= abs(engineThrust);
+        }
+        
     }
 }
 /*  generates new gate and stores it to queue   */
@@ -78,6 +81,9 @@ void popGates(queue_t *gateQueue){
     for (; x < i; x++)
     {
         Gate *gate = get_from_queue(gateQueue, x);
+        if(gate == NULL){
+            continue;
+        }
         // if gate isn't on screen 
         if (gate->gapX + gate->gapW <= 0)
         {

@@ -33,18 +33,32 @@ void* pop_from_queue(queue_t *queue){
 void clean_queue(queue_t *queue){
     for(int i = queue->head; i < queue->tail; i++){
 
-        pop_from_queue(queue);
+        void * element = pop_from_queue(queue);
+        if(element != NULL){
+                free(element);
+        }
     }
+    queue->head = queue->tail = 0;
 }
 
 void* get_from_queue(queue_t *queue, int idx){
-    return queue->array[(idx)%queue->capacity];
+    if((idx)%queue->capacity < queue->tail &&  (idx)%queue->capacity >= queue->head){
+        
+        if(queue->array[(idx)%queue->capacity] != NULL){
+        return queue->array[(idx)%queue->capacity];
+        }
+    }
+    
+    return NULL;
 }
 
 void delete_queue(queue_t *queue){
     for(int i = queue->head; i < queue->tail; i++){
         void * element = get_from_queue(queue, i);
-        free(element);
+        if(element != NULL){
+                free(element);
+        }
+        
     }
     free(queue->array);
     queue->size = queue->head = queue->tail = 0;
