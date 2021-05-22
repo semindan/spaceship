@@ -1,5 +1,4 @@
-# APO Semestral project
-
+# APO Semestral project(Václav Fišer, Danil Semin)
 ##### Table of contents
 1. [Prerequisites](#prerequisites)
 2. [Installation](#installation)
@@ -78,7 +77,3 @@ Exit to the main menu when you are done by pushing the red button or after writi
 ### Application diagram
 ![Detailed diagram of all calls!](diagram.jpg "Method diagram")
 ![Light diagram of relations](diagram_light.jpg "Method diagram")
-
-### Doku
-sem něco technical i guess
-
