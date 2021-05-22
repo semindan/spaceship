@@ -1,4 +1,6 @@
-# APO Semestral project(Václav Fišer, Danil Semin)
+# APO Semestral project
+by Václav Fišer & Danil Semin
+
 ##### Table of contents
 1. [Prerequisites](#prerequisites)
 2. [Installation](#installation)
@@ -75,5 +77,9 @@ To confirm your choice press the blue button. Maximum length of the name is 16 c
 Exit to the main menu when you are done by pushing the red button or after writing 16 characters the result is saved and you are redirected to the main menu automatically.  
 
 ### Application diagram
+Detailed diagram showing which methods call others, some are missing out:
 ![Detailed diagram of all calls!](diagram.jpg "Method diagram")
+***
+Lighter version of diagram showing more or less includes:
 ![Light diagram of relations](diagram_light.jpg "Method diagram")
+***
