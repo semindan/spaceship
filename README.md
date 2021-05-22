@@ -32,7 +32,7 @@ cd apo-semestral-project
 1. Open the terminal and get to the project's directory  
 2. Local execution on MZAPO:
 	```console
-	make & ./spaceship
+	make && ./spaceship
 	```
 3. Remote execution (link to the mzapo guide):
 	```console  
