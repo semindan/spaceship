@@ -1,15 +1,19 @@
 # APO Semestral project
 
 ##### Table of contents
-1. Prerequisites
-2. Installation
-3. Compilation and execution
-4. Game manual
-5. Application diagram
+1. [Prerequisites](#prerequisites)
+2. [Installation](#installation)
+3. [Compilation and execution](#compilation-and-execution)
+4. [Game manual](#game-manual)  
+    4.1 [Menu](#menu)  
+	4.2 [Scoreboard](#scoreboard)  
+	4.3 [Game parameters](#game-parameters)  
+	4.4 [Game](#game)  
+	4.5 [Game Over screen](#game-over-screen)  
+5. [Application diagram](#application-diagram)
 
 ### Prerequisites
-1. [MZAPO kit](https://cw.fel.cvut.cz/b202/courses/b35apo/documentation/mz_apo-howto/start)
-
+[MZAPO kit](https://cw.fel.cvut.cz/b202/courses/b35apo/documentation/mz_apo-howto/start)
 ### Installation
 Project archive can be downloaded from the website page:  
 https://gitlab.fel.cvut.cz/semindan/apo-semestral-project  
@@ -37,7 +41,7 @@ cd apo-semestral-project
 	```
 4. Play
 
-If you experience graphical glitches, such as only half of screen being used, you need to change defined display in *mzapo_parlcd.c* uncommenting the defines. 
+If you experience graphical glitches, such as only part of screen being used, you need to change defined display in *mzapo_parlcd.c* uncommenting the defines. 
 ```C
 #define HX8357_B
 #define ILI9481
