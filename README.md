@@ -15,7 +15,7 @@ Project archive can be downloaded from the website page:
 https://gitlab.fel.cvut.cz/semindan/apo-semestral-project  
 After that it's necessary to unzip the archive.
 
-Alternatively, open the terminal and write the following command:¨
+Alternatively, open the terminal and write the following command:
 ```console  
 git clone https://gitlab.fel.cvut.cz/semindan/apo-semestral-project.git 
 ``` 
@@ -72,7 +72,8 @@ To confirm your choice press the blue button. Maximum length of the name is 16 c
 Exit to the main menu when you are done by pushing the red button or after writing 16 characters the result is saved and you are redirected to the main menu automatically.  
 
 ### Application diagram
-bude image
+![Detailed diagram of all calls!](diagram.jpg "Method diagram")
+![Light diagram of relations](diagram_light.jpg "Method diagram")
 
 ### Doku
 sem něco technical i guess
